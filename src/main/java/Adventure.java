@@ -4,15 +4,15 @@ public class Adventure {
 
 
     public Adventure() {
-        Room room1 = new Room("Room 1","");
-        Room room2 = new Room("Room 2","");
-        Room room3 = new Room("Room 3","");
-        Room room4 = new Room("Room 4","");
-        Room room5 = new Room("Room 5","");
-        Room room6 = new Room("Room 6","");
-        Room room7 = new Room("Room 7","");
-        Room room8 = new Room("Room 8","");
-        Room room9 = new Room("Room 9","");
+        Room room1 = new Room("Room 1","room with no distinct features, except two doors");
+        Room room2 = new Room("Room 2","room with no distinct features, except two doors");
+        Room room3 = new Room("Room 3","room with no distinct features, except two doors");
+        Room room4 = new Room("Room 4","room with no distinct features, except two doors");
+        Room room5 = new Room("Room 5","room with no distinct features, except one door");
+        Room room6 = new Room("Room 6","room with no distinct features, except two doors");
+        Room room7 = new Room("Room 7","room with no distinct features, except two doors");
+        Room room8 = new Room("Room 8","room with no distinct features, except three doors");
+        Room room9 = new Room("Room 9","room with no distinct features, except two doors");
         currentRoom = room1;
         room1.setEast(room2);
         room1.setSouth(room4);
