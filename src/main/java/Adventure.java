@@ -4,7 +4,7 @@ public class Adventure {
 
 
     public Adventure() {
-        Room room1 = new Room("Room 1", "");
+        Room room1 = new Room("Room 1","");
         Room room2 = new Room("Room 2","");
         Room room3 = new Room("Room 3","");
         Room room4 = new Room("Room 4","");
@@ -35,41 +35,39 @@ public class Adventure {
     }
 
     public boolean goNorth(){
-        if (currentRoom.getNorth().equals(null)) {
+        if (currentRoom.getNorth() == null) {
             return false;
         }else{
             currentRoom = currentRoom.getNorth();
             return true;
-
         }
     }
     public boolean goWest() {
-        if (currentRoom.getWest().equals(null)) {
+        if (currentRoom.getWest() == null) {
             return false;
         } else {
             currentRoom = currentRoom.getWest();
             return true;
-
         }
-
     }
 
     public boolean goEast() {
-        if (currentRoom.getEast().equals(null)) {
+        if (currentRoom.getEast() == null) {
             return false;
         } else {
             currentRoom = currentRoom.getEast();
             return true;
-
         }
     }
     public boolean goSouth() {
-        if (currentRoom.getSouth().equals(null)) {
+        if (currentRoom.getSouth() == null) {
             return false;
         } else {
             currentRoom = currentRoom.getSouth();
             return true;
-
         }
+    }
+    public String look() {
+        return currentRoom.getDescription();
     }
 }

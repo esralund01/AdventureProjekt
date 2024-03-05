@@ -2,6 +2,9 @@ public class Room {
 
 
     private String name;
+
+
+
     private String description;
     private Room north;
     private Room east;
@@ -44,4 +47,8 @@ public class Room {
     public Room getSouth() {
         return south;
     }
+    public String getDescription() {
+        return description;
+    }
+
 }
