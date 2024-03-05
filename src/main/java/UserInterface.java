@@ -21,57 +21,54 @@ public class UserInterface {
             System.out.println("which direction do you want to go?");
             String input = scanner.next();
 
-            if (input.equals("go north")) {
-                System.out.println("going north." + adventure.look());
-                adventure.goNorth();
-
-            } else if (input.equals("go west")) {
-                if (adventure.goWest()){
-                    System.out.println("going west. " + adventure.look());
-            } else {
-                    System.out.println("you cannot go that way");
-        }
-
-            } else if (input.equals("go south")) {
-                if (adventure.goSouth()){
-                    System.out.println("going south. " + adventure.look());
-                } else {
-                    System.out.println("you cannot go that way");
+            switch (input) {
+                case "go north" -> {
+                    if (adventure.goNorth()) {
+                        System.out.println("going north. " + adventure.look());
+                    } else {
+                        System.out.println("you cannot go that way");
+                    }
                 }
-
-
-            } else if (input.equals("go east")) {
-                if (adventure.goEast()){
-                    System.out.println("going east. " + adventure.look());
-                } else {
-                    System.out.println("you cannot go that way");
+                case "go west" -> {
+                    if (adventure.goWest()) {
+                        System.out.println("going west. " + adventure.look());
+                    } else {
+                        System.out.println("you cannot go that way");
+                    }
                 }
-
-            } else if (input.equals("look")) {
-                System.out.println("looking around. you are in room: " + adventure.look());
-
-             } else if(input.equals("exit")) {
-                gameIsRunning = false;
-                System.out.println("the game has ended.");
-
-            } else if (input.equals("help")){
-                helpProgram();
-
-            } else {
-                System.out.println("this input doesnt work. type 'help' to get help");
-
+                case "go south" -> {
+                    if (adventure.goSouth()) {
+                        System.out.println("going south. " + adventure.look());
+                    } else {
+                        System.out.println("you cannot go that way");
+                    }
+                }
+                case "go east" -> {
+                    if (adventure.goEast()) {
+                        System.out.println("going east. " + adventure.look());
+                    } else {
+                        System.out.println("you cannot go that way");
+                    }
+                }
+                case "look" -> System.out.println("looking around. you are in room: " + adventure.look());
+                case "exit" -> {
+                    gameIsRunning = false;
+                    System.out.println("the game has ended.");
+                }
+                case "help" -> helpProgram();
+                default -> System.out.println("this input doesnt work. type 'help' to get help");
             }
         }
     }
 
-    public void helpProgram(){
-            System.out.println("help is on its way.");
+    public void helpProgram() {
+        System.out.println("help is on its way.");
         System.out.println("typing 'go north' will make you go north");
         System.out.println("typing 'go west' will make you go west");
         System.out.println("typing 'go east' will make you go east");
         System.out.println("typing 'go south' will make you go south");
         System.out.println("typing 'exit' will make you exit the game");
         System.out.println("typing 'look' will give you a description of the room you are in");
-        }
     }
+}
 
