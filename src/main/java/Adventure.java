@@ -26,4 +26,8 @@ public class Adventure {
         return player.look();
     }
 
+    public void turnOnLight(){
+        player.turnOnLight();
+    }
+
 }

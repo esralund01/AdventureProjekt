@@ -51,6 +51,10 @@ public class UserInterface {
                     }
                 }
                 case "look" -> System.out.println("looking around. you are in room: " + adventure.look());
+                case "turn on light" -> {
+                    adventure.turnOnLight();
+                    System.out.println("light is now on");
+                }
                 case "exit" -> {
                     gameIsRunning = false;
                     System.out.println("the game has ended.");
