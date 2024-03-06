@@ -14,7 +14,7 @@ public class UserInterface {
     public void startProgram() {
 
         System.out.println("Welcome to Adventure game, you have begun the game. ");
-
+        System.out.println(adventure.look());
         boolean gameIsRunning = true;
 
         while (gameIsRunning) {

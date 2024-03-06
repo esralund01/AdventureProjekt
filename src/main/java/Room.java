@@ -1,17 +1,19 @@
 public class Room {
 
     // Attributes
-    private final String name; // no getter yet
+    private final String name;
     private final String description;
     private Room north;
     private Room east;
     private Room west;
     private Room south;
+    private boolean visited;
 
     // Constructor
     public Room(String name, String description) {
         this.name = name;
         this.description = description;
+        visited = false;
     }
 
     // Setters
@@ -41,7 +43,18 @@ public class Room {
     public Room getSouth() {
         return south;
     }
+    public String getName() {
+        return name;
+    }
     public String getDescription() {
         return description;
+    }
+    public boolean isVisited() {
+        return visited;
+    }
+
+    // Method
+    public void visit() {
+        visited = true;
     }
 }

@@ -45,7 +45,12 @@ public class Player {
     }
 
     public String look() {
-        return currentRoom.getDescription();
+        if (currentRoom.isVisited()) {
+            return currentRoom.getName();
+        }
+        else {
+            currentRoom.visit();
+            return currentRoom.getName() + ": " + currentRoom.getDescription();
+        }
     }
-
 }
