@@ -5,7 +5,7 @@ public class Player {
 
 
     public Player(Room firstRoom) {
-        firstRoom = currentRoom;
+        currentRoom = firstRoom;
     }
 
     public boolean goNorth() {
