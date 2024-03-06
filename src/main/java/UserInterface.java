@@ -61,7 +61,7 @@ public class UserInterface {
         }
     }
 
-    public void helpProgram() {
+    private void helpProgram() {
         System.out.println("help is on its way.");
         System.out.println("typing 'go north' will make you go north");
         System.out.println("typing 'go west' will make you go west");

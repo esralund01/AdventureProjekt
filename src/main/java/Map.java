@@ -1,11 +1,12 @@
 public class Map {
 
+    // Attribute
+    private final Room firstRoom;
 
-
-    private Room firstRoom;
-
-
+    // Constructor
     public Map() {
+
+        // Creating rooms
         Room room1 = new Room("Room 1","room with no distinct features, except two doors");
         Room room2 = new Room("Room 2","room with no distinct features, except two doors");
         Room room3 = new Room("Room 3","room with no distinct features, except two doors");
@@ -15,7 +16,23 @@ public class Map {
         Room room7 = new Room("Room 7","room with no distinct features, except two doors");
         Room room8 = new Room("Room 8","room with no distinct features, except three doors");
         Room room9 = new Room("Room 9","room with no distinct features, except two doors");
+
+        // Setting first room
         firstRoom = room1;
+
+        // Connecting rooms
+        connectWestEast(room1, room2);
+        connectWestEast(room2, room3);
+        connectNorthSouth(room3, room6);
+        connectNorthSouth(room6, room9);
+        connectNorthSouth(room1, room4);
+        connectNorthSouth(room4, room7);
+        connectWestEast(room7, room8);
+        connectWestEast(room8, room9);
+        connectNorthSouth(room5, room8);
+
+        /*
+        // Connecting rooms
         room1.setEast(room2);
         room1.setSouth(room4);
         room2.setWest(room1);
@@ -34,9 +51,21 @@ public class Map {
         room8.setEast(room9);
         room9.setWest(room8);
         room9.setNorth(room6);
-
+        */
     }
+
+    // Getter
     public Room getFirstRoom() {
         return firstRoom;
+    }
+
+    // Auxiliary method
+    private void connectWestEast(Room western, Room eastern) {
+        western.setEast(eastern);
+        eastern.setWest(western);
+    }
+    private void connectNorthSouth(Room northern, Room southern) {
+        northern.setSouth(southern);
+        southern.setNorth(northern);
     }
 }
