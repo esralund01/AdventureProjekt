@@ -22,28 +22,28 @@ public class UserInterface {
             String input = scanner.next();
 
             switch (input) {
-                case "go north" -> {
+                case "go north", "north", "n" -> {
                     if (adventure.goNorth()) {
                         System.out.println("going north. " + adventure.look());
                     } else {
                         System.out.println("you cannot go that way");
                     }
                 }
-                case "go west" -> {
+                case "go west", "west", "w" -> {
                     if (adventure.goWest()) {
                         System.out.println("going west. " + adventure.look());
                     } else {
                         System.out.println("you cannot go that way");
                     }
                 }
-                case "go south" -> {
+                case "go south", "south", "s" -> {
                     if (adventure.goSouth()) {
                         System.out.println("going south. " + adventure.look());
                     } else {
                         System.out.println("you cannot go that way");
                     }
                 }
-                case "go east" -> {
+                case "go east", "east", "e" -> {
                     if (adventure.goEast()) {
                         System.out.println("going east. " + adventure.look());
                     } else {
