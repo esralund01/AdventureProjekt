@@ -55,7 +55,7 @@ public class Player {
         }
         else {
             currentRoom.visit();
-            return currentRoom.getName() + ": " + currentRoom.getDescription();
+            return currentRoom.getName() + ": " + currentRoom.getDescription() + currentRoom.showItems();
         }
     }
 

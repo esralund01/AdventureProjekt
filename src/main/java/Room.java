@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Room {
 
@@ -10,6 +11,7 @@ public class Room {
     private Room south;
     private boolean visited;
     private boolean dark;
+    private final ArrayList<Item> itemList;
 
 
     // Constructor
@@ -17,7 +19,8 @@ public class Room {
         this.name = name;
         this.description = description;
         visited = false;
-        dark = true;
+        dark = false;
+        itemList = new ArrayList<>();
     }
 
 
@@ -81,5 +84,16 @@ public class Room {
 
     public void turnOnLight(){
         dark = false;
+    }
+
+    public void addItem(Item item){
+        itemList.add(item);
+    }
+    public String showItems() {
+        String result = "";
+        for (Item item : itemList) {
+            result += " and " + item.getLongName();
+        }
+        return result;
     }
 }
