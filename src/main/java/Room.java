@@ -14,6 +14,7 @@ public class Room {
     private final ArrayList<Item> itemList;
 
 
+
     // Constructor
     public Room(String name, String description) {
         this.name = name;
@@ -64,11 +65,12 @@ public class Room {
 
     public String getDescription() {
         if (dark) {
-          return "the room is filled with darkness. to turn on the lights, write 'turn on lights'";
+            return "the room is filled with darkness. to turn on the lights, write 'turn on light'";
         } else {
             return description;
         }
     }
+
     public boolean isVisited() {
         return visited;
     }
@@ -78,11 +80,11 @@ public class Room {
         visited = true;
     }
 
-    public boolean isDark(){
+    public boolean isDark() {
         return dark;
     }
 
-    public void turnOnLight(){
+    public void turnOnLight() {
         dark = false;
     }
 
@@ -96,4 +98,15 @@ public class Room {
         }
         return result;
     }
+
+    public Item findItem(String itemWord) {
+        for (Item item : itemList) {
+            if (item.getShortName().equals(itemWord)) {
+                itemList.remove(item);
+                return item;
+            }
+        }
+        return null;
+    }
+
 }

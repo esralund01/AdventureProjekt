@@ -2,6 +2,7 @@ public class Adventure {
 
     private final Player player;
 
+
     public Adventure() {
         Map map = new Map();
         player = new Player(map.getFirstRoom());
@@ -28,6 +29,11 @@ public class Adventure {
 
     public void turnOnLight(){
         player.turnOnLight();
+    }
+
+    public boolean take(String itemWord){
+       return player.take(itemWord);
+
     }
 
 }

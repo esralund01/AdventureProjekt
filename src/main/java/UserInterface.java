@@ -4,6 +4,7 @@ public class UserInterface {
 
     private Scanner scanner;
     private Adventure adventure;
+    private String[] input;
 
     public UserInterface() {
         scanner = new Scanner(System.in);
@@ -19,42 +20,26 @@ public class UserInterface {
 
         while (gameIsRunning) {
             System.out.println("which direction do you want to go?");
-            String input = scanner.next();
+            input = scanner.next().split(" ");
 
-            switch (input) {
-                case "go north", "north", "n" -> {
-                    if (adventure.goNorth()) {
-                        System.out.println("going north. " + adventure.look());
-                    } else {
-                        System.out.println("you cannot go that way");
-                    }
+            switch (input[0]) {
+                case "go" -> {
+                    go();
                 }
-                case "go west", "west", "w" -> {
-                    if (adventure.goWest()) {
-                        System.out.println("going west. " + adventure.look());
+               case "take" -> {
+                    if(adventure.take(input[1])) {
+                        System.out.println(input[1] + " added to inventory");
                     } else {
-                        System.out.println("you cannot go that way");
+                        System.out.println(input[1] + " not found in this room");
                     }
-                }
-                case "go south", "south", "s" -> {
-                    if (adventure.goSouth()) {
-                        System.out.println("going south. " + adventure.look());
-                    } else {
-                        System.out.println("you cannot go that way");
-                    }
-                }
-                case "go east", "east", "e" -> {
-                    if (adventure.goEast()) {
-                        System.out.println("going east. " + adventure.look());
-                    } else {
-                        System.out.println("you cannot go that way");
-                    }
-                }
+               }
                 case "look" -> System.out.println("looking around. you are in room: " + adventure.look());
-                case "turn on light" -> {
+               /* case "turn on light" -> {
                     adventure.turnOnLight();
                     System.out.println("light is now on");
                 }
+
+                */
                 case "exit" -> {
                     gameIsRunning = false;
                     System.out.println("the game has ended.");
@@ -73,6 +58,39 @@ public class UserInterface {
         System.out.println("typing 'go south' will make you go south");
         System.out.println("typing 'exit' will make you exit the game");
         System.out.println("typing 'look' will give you a description of the room you are in");
+    }
+
+    private void go(){
+        switch (input[1]) {
+            case  "north", "n" -> {
+                if (adventure.goNorth()) {
+                    System.out.println("going north. " + adventure.look());
+                } else {
+                    System.out.println("you cannot go that way");
+                }
+            }
+            case  "west", "w" -> {
+                if (adventure.goWest()) {
+                    System.out.println("going west. " + adventure.look());
+                } else {
+                    System.out.println("you cannot go that way");
+                }
+            }
+            case "south", "s" -> {
+                if (adventure.goSouth()) {
+                    System.out.println("going south. " + adventure.look());
+                } else {
+                    System.out.println("you cannot go that way");
+                }
+            }
+            case "east", "e" -> {
+                if (adventure.goEast()) {
+                    System.out.println("going east. " + adventure.look());
+                } else {
+                    System.out.println("you cannot go that way");
+                }
+            }
+        }
     }
 }
 

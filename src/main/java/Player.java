@@ -1,12 +1,15 @@
+import java.util.ArrayList;
+
 public class Player {
 
     private Room currentRoom;
     private Room previousRoom;
-
+    private final ArrayList<Item> inventory;
 
 
     public Player(Room firstRoom) {
         currentRoom = firstRoom;
+        inventory = new ArrayList<>();
     }
 
     public boolean goNorth() {
@@ -62,4 +65,16 @@ public class Player {
     public void turnOnLight(){
         currentRoom.turnOnLight();
     }
+
+    public boolean take(String itemWord){
+        Item found = currentRoom.findItem(itemWord);
+        if(found==null){
+            return false;
+        } else{
+            inventory.add(found);
+            return true;
+        }
+    }
+
+
 }
