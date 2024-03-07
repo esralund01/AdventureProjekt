@@ -35,5 +35,8 @@ public class Adventure {
        return player.take(itemWord);
 
     }
+    public String showInventory(){
+        return player.showInvetory();
+    }
 
 }

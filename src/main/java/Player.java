@@ -75,6 +75,15 @@ public class Player {
             return true;
         }
     }
-
+    public String showInvetory() {
+        if(inventory.isEmpty()){
+            return "Your inventory is empty";
+        }
+        String result = "Your inventory contains ";
+        for (Item item : inventory) {
+            result +=  item.getLongName() + " and ";
+        }
+        return result.substring(0, result.length() - 5);
+    }
 
 }

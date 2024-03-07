@@ -44,6 +44,9 @@ public class UserInterface {
                     gameIsRunning = false;
                     System.out.println("the game has ended.");
                 }
+                case "inventory", "inv", "invent" -> {
+                    System.out.println(adventure.showInventory());
+                }
                 case "help" -> helpProgram();
                 default -> System.out.println("this input doesnt work. type 'help' to get help");
             }
