@@ -45,4 +45,11 @@ public class Adventure {
         return player.showInvetory();
     }
 
+    public boolean go(String direction){
+        return player.go(direction);
+    }
+    public String enter(){
+        return player.enter();
+    }
+
 }

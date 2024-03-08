@@ -24,7 +24,11 @@ public class UserInterface {
 
             switch (input[0]) {
                 case "go" -> {
-                    go();
+                    if (adventure.go(input[1])){
+                        System.out.println("going " + input[1] + ". " + adventure.enter());
+                    } else {
+                        System.out.println("you cannot go that way");
+                    }
                 }
                case "take" -> {
                     if(adventure.take(input[1])) {
@@ -68,39 +72,6 @@ public class UserInterface {
         System.out.println("typing 'go south' will make you go south");
         System.out.println("typing 'exit' will make you exit the game");
         System.out.println("typing 'look' will give you a description of the room you are in");
-    }
-
-    private void go(){
-        switch (input[1]) {
-            case  "north", "n" -> {
-                if (adventure.goNorth()) {
-                    System.out.println("going north. " + adventure.look());
-                } else {
-                    System.out.println("you cannot go that way");
-                }
-            }
-            case  "west", "w" -> {
-                if (adventure.goWest()) {
-                    System.out.println("going west. " + adventure.look());
-                } else {
-                    System.out.println("you cannot go that way");
-                }
-            }
-            case "south", "s" -> {
-                if (adventure.goSouth()) {
-                    System.out.println("going south. " + adventure.look());
-                } else {
-                    System.out.println("you cannot go that way");
-                }
-            }
-            case "east", "e" -> {
-                if (adventure.goEast()) {
-                    System.out.println("going east. " + adventure.look());
-                } else {
-                    System.out.println("you cannot go that way");
-                }
-            }
-        }
     }
 }
 

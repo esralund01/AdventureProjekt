@@ -12,6 +12,23 @@ public class Player {
         inventory = new ArrayList<>();
     }
 
+    // Go kopieret fra sigens powerpoint.
+    public boolean go(String direction){
+        Room desiredRoom = switch (direction){
+            case "north", "n" -> currentRoom.getNorth();
+            case "east", "e" -> currentRoom.getEast();
+            case "west", "w" -> currentRoom.getWest();
+            case "south", "s" -> currentRoom.getSouth();
+            default -> null;
+        };
+
+        if (desiredRoom != null){
+            currentRoom = desiredRoom;
+            return true;
+        } else {
+            return false;
+        }
+    }
     public boolean goNorth() {
         if (currentRoom.getNorth() == null || currentRoom.isDark() && currentRoom.getNorth()!=previousRoom) {
             return false;
@@ -53,6 +70,9 @@ public class Player {
     }
 
     public String look() {
+            return currentRoom.getName() + ": " + currentRoom.getDescription() + currentRoom.showItems();
+        }
+    public String enter() {
         if (currentRoom.isVisited()) {
             return currentRoom.getName();
         }
