@@ -33,6 +33,13 @@ public class UserInterface {
                         System.out.println(input[1] + " not found in this room");
                     }
                }
+                case "drop" -> {
+                    if(adventure.drop(input[1])) {
+                        System.out.println(input[1] + " was removed from inventory");
+                    } else {
+                        System.out.println(input[1] + " not found i inventory");
+                    }
+                }
                 case "look" -> System.out.println("looking around. you are in room: " + adventure.look());
                /* case "turn on light" -> {
                     adventure.turnOnLight();

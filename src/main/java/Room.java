@@ -91,6 +91,10 @@ public class Room {
     public void addItem(Item item){
         itemList.add(item);
     }
+    public void dropItem(Item item){
+        itemList.remove(item);
+    }
+
     public String showItems() {
         String result = "";
         for (Item item : itemList) {

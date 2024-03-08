@@ -35,6 +35,12 @@ public class Adventure {
        return player.take(itemWord);
 
     }
+
+    public boolean drop(String itemWord){
+        return player.drop(itemWord);
+
+    }
+
     public String showInventory(){
         return player.showInvetory();
     }

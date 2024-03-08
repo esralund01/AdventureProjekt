@@ -75,6 +75,16 @@ public class Player {
             return true;
         }
     }
+    public boolean drop(String itemWord){
+        for (Item item : inventory) {
+            if (item.getShortName().equals(itemWord)) {
+                inventory.remove(item);
+                currentRoom.addItem(item);
+                return true;
+            }
+        }
+        return false;
+    }
     public String showInvetory() {
         if(inventory.isEmpty()){
             return "Your inventory is empty";
