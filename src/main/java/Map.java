@@ -31,7 +31,7 @@ public class Map {
         connectWestEast(room8, room9);
         connectNorthSouth(room5, room8);
 
-        // putting items into rooms
+        // Putting items into rooms
         room1.addItem(new Item("a shiny brass lamp","lamp"));
         room2.addItem(new Item("a gold knife","knife"));
         room3.addItem(new Item("a diamond pickaxe","pickaxe"));
@@ -42,11 +42,12 @@ public class Map {
         return firstRoom;
     }
 
-    // Auxiliary method
+    // Auxiliary methods
     private void connectWestEast(Room western, Room eastern) {
         western.setEast(eastern);
         eastern.setWest(western);
     }
+
     private void connectNorthSouth(Room northern, Room southern) {
         northern.setSouth(southern);
         southern.setNorth(northern);

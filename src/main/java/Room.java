@@ -11,17 +11,15 @@ public class Room {
     private Room south;
     private boolean visited;
     private boolean dark;
-    private final ArrayList<Item> itemList;
-
-
+    private final ArrayList<Item> items;
 
     // Constructor
     public Room(String name, String description) {
         this.name = name;
         this.description = description;
         visited = false;
-        dark = false;
-        itemList = new ArrayList<>();
+        dark = false; // Slå "Darkness, imprison me!" til her.
+        items = new ArrayList<>();
     }
 
 
@@ -64,24 +62,24 @@ public class Room {
     }
 
     public String getDescription() {
-        if (dark) {
-            return "the room is filled with darkness. to turn on the lights, write 'turn on light'";
-        } else {
-            return description;
-        }
+        return description;
+    }
+
+    public ArrayList<Item> getItems() {
+        return items;
     }
 
     public boolean isVisited() {
         return visited;
     }
 
-    // Method
-    public void visit() {
-        visited = true;
-    }
-
     public boolean isDark() {
         return dark;
+    }
+
+    // Methods
+    public void visit() {
+        visited = true;
     }
 
     public void turnOnLight() {
@@ -89,24 +87,13 @@ public class Room {
     }
 
     public void addItem(Item item){
-        itemList.add(item);
-    }
-    public void dropItem(Item item){
-        itemList.remove(item);
-    }
-
-    public String showItems() {
-        String result = "";
-        for (Item item : itemList) {
-            result += " and " + item.getLongName();
-        }
-        return result;
+        items.add(item);
     }
 
     public Item findItem(String itemWord) {
-        for (Item item : itemList) {
+        for (Item item : items) {
             if (item.getShortName().equals(itemWord)) {
-                itemList.remove(item);
+                items.remove(item);
                 return item;
             }
         }

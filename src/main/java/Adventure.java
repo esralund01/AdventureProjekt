@@ -1,32 +1,17 @@
+import java.util.ArrayList;
+
 public class Adventure {
 
+    // Attribute
     private final Player player;
 
-
+    // Constructor
     public Adventure() {
         Map map = new Map();
         player = new Player(map.getFirstRoom());
     }
 
-    public boolean goNorth(){
-        return player.goNorth();
-    }
-    public boolean goWest() {
-       return player.goWest();
-
-    }
-
-    public boolean goEast() {
-       return player.goEast();
-    }
-    public boolean goSouth() {
-      return player.goSouth();
-
-    }
-    public String look() {
-        return player.look();
-    }
-
+    // Methods
     public void turnOnLight(){
         player.turnOnLight();
     }
@@ -41,15 +26,15 @@ public class Adventure {
 
     }
 
-    public String showInventory(){
-        return player.showInvetory();
+    public ArrayList<Item> getInventory(){
+        return player.getInventory();
+    }
+
+    public Room getCurrentRoom(){
+        return player.getCurrentRoom();
     }
 
     public boolean go(String direction){
         return player.go(direction);
     }
-    public String enter(){
-        return player.enter();
-    }
-
 }
