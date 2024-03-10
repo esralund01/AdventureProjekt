@@ -32,7 +32,7 @@ public class UserInterface {
                     System.out.println("Turning on light...");
                     look();
                 }
-                case "inventory", "inv" -> {
+                case "inventory", "invent", "inv" -> {
                     ArrayList<Item> inventory = adventure.getInventory();
                     if (inventory.isEmpty()) {
                         System.out.println("Your inventory is empty.");
@@ -97,10 +97,10 @@ public class UserInterface {
 
     private void help() {
         System.out.println("Available commands:");
-        System.out.println("- 'go north' or 'go n' takes you north. This is also available for south, west, and east.");
+        System.out.println("- 'go north', 'go n' or 'n' takes you north. This is also available for south, west, and east.");
         System.out.println("- 'look' gives you a description of the place you are in.");
         //System.out.println("- 'turn on light' turns on the light.");
-        System.out.println("- 'inventory' or 'inv' shows your inventory.");
+        System.out.println("- 'inventory', 'invent' or 'inv' shows your inventory.");
         System.out.println("- 'take <item>' puts an item in your inventory.");
         System.out.println("- 'drop <item>' removes an item from your inventory.");
         System.out.println("- 'exit' quits the game.");
