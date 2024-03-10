@@ -25,6 +25,7 @@ public class UserInterface {
             String[] command = scanner.next().split(" ");
             switch (command[0]) {
                 case "go" -> go(command[1]);
+                case "n", "e", "w", "s" -> go(command[0]);
                 case "look" -> look();
                 case "turn" -> {
                     adventure.turnOnLight();
