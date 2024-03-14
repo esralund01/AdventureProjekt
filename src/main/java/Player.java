@@ -35,23 +35,19 @@ public class Player {
     public boolean go(String direction) {
         // go er en kopi af move fra Signes PowerPoint på Fronter men med "Darkness, imprison me!" tilføjet.
         Room desiredRoom = switch (direction) {
-            case "north", "n" -> currentRoom.getNorth();
-            case "east", "e" -> currentRoom.getEast();
-            case "west", "w" -> currentRoom.getWest();
-            case "south", "s" -> currentRoom.getSouth();
+            case "north" -> currentRoom.getNorth();
+            case "east" -> currentRoom.getEast();
+            case "west" -> currentRoom.getWest();
+            case "south" -> currentRoom.getSouth();
             default -> null;
         };
-        if (desiredRoom != null && !currentRoom.isDark() || currentRoom.getNorth() != previousRoom) {
+        if (desiredRoom != null && (!currentRoom.getIsDark() || desiredRoom == previousRoom)) {
             previousRoom = currentRoom;
             currentRoom = desiredRoom;
             return true;
         } else {
             return false;
         }
-    }
-
-    public void turnOnLight() {
-        currentRoom.turnOnLight();
     }
 
     public boolean take(String itemWord) {
@@ -76,36 +72,34 @@ public class Player {
         return false;
     }
 
-    public boolean eat (String itemWord) {
-        Item found = currentRoom.findItem(itemWord);
-        if(found == null){
-            for (Item item : inventory) {
-                if (item.getShortName().equals(itemWord)) {
-                    if (item instanceof Food) {
-                        health += ((Food) item).getHealthPoints();
-                        if (health > getMaxHealth()) {
-                            health = maxHealth;
-                        }
-                        inventory.remove(item);
-                    }
-
-                    return true;
-                }
-            }
-            return false; // var ikke i rummet OG ikke i inventory
-        }else {
-            if (found instanceof Food){
-                health += ((Food) found).getHealthPoints();
-                if (health > getMaxHealth()){
-                    health = maxHealth;
-                }
-                currentRoom.removeItem(found);
-                return true;
-            } else {
-                return false; // var ikke mad
-            }
-
-
+    public boolean eat(String itemWord) {
+        // Erklærer (declares) variablen 'food'.
+        Food food = null;
+        // Leder efter søgeordet i rummet.
+        Item itemFromRoom = currentRoom.findItem(itemWord);
+        // Hvis mad bliver fundet i rummet, så bliver det tildelt (assigned) til 'food'. Her er null-tjek inkluderet i instanceof.
+        if (itemFromRoom instanceof Food) {
+            food = (Food) itemFromRoom;
+            currentRoom.removeItem(itemFromRoom);
         }
+        // Hvis ikke, ledes efter søgeordet i inventory.
+        else {
+            for (Item itemFromInventory : inventory) {
+                if (itemFromInventory.getShortName().equals(itemWord) && itemFromInventory instanceof Food) {
+                    food = (Food) itemFromInventory;
+                    inventory.remove(itemFromInventory);
+                    break; // Stopper for-loopet.
+                }
+            }
+        }
+        // Hvis der blev fundet mad.
+        if (food != null) {
+            health += food.getHealthPoints();
+            if (health > maxHealth) {
+                health = maxHealth;
+            }
+            return true;
+        }
+        return false;
     }
 }

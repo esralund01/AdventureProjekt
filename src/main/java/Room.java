@@ -9,19 +9,29 @@ public class Room {
     private Room east;
     private Room west;
     private Room south;
-    private boolean visited;
-    private boolean dark;
+    private boolean isAlreadyVisited;
+    private final boolean hasLights;
+    private boolean isDark;
     private final ArrayList<Item> items;
 
     // Constructor
     public Room(String name, String description) {
         this.name = name;
         this.description = description;
-        visited = false;
-        dark = false; // Slå "Darkness, imprison me!" til her.
+        hasLights = false;
+        isDark = false;
+        isAlreadyVisited = false;
         items = new ArrayList<>();
     }
 
+    public Room(String name, String description, boolean isDark) {
+        this.name = name;
+        this.description = description;
+        hasLights = true;
+        this.isDark = isDark;
+        isAlreadyVisited = false;
+        items = new ArrayList<>();
+    }
 
     // Setters
     public void setNorth(Room north) {
@@ -62,31 +72,38 @@ public class Room {
     }
 
     public String getDescription() {
-        return description;
+        if (isDark) {
+            return "place filled with darkness, except in the direction you came from";
+        }
+        String s = description;
+        for (Item item : items) {
+            s += ", and " + item.getLongName();
+        }
+        return s;
     }
 
-    public ArrayList<Item> getItems() {
-        return items;
+    public boolean getIsAlreadyVisited() {
+        return isAlreadyVisited;
     }
 
-    public boolean isVisited() {
-        return visited;
-    }
-
-    public boolean isDark() {
-        return dark;
+    public boolean getIsDark() {
+        return isDark;
     }
 
     // Methods
     public void visit() {
-        visited = true;
+        isAlreadyVisited = true;
     }
 
-    public void turnOnLight() {
-        dark = false;
+    public boolean turnLight(boolean on) {
+        if (hasLights) {
+            isDark = !on;
+            return true;
+        }
+        return false;
     }
 
-    public void addItem(Item item){
+    public void addItem(Item item) {
         items.add(item);
     }
 
@@ -99,7 +116,7 @@ public class Room {
         return null;
     }
 
-    public void removeItem (Item item){
+    public void removeItem (Item item) {
         items.remove(item);
     }
 

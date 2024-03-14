@@ -7,34 +7,29 @@ public class Adventure {
 
     // Constructor
     public Adventure() {
-        Map map = new Map();
-        player = new Player(map.getFirstRoom());
+        player = new Player(new Map().getFirstRoom());
     }
 
     // Methods
-    public void turnOnLight(){
-        player.turnOnLight();
-    }
-
-    public boolean take(String itemWord){
+    public boolean take(String itemWord) {
        return player.take(itemWord);
 
     }
 
-    public boolean drop(String itemWord){
+    public boolean drop(String itemWord) {
         return player.drop(itemWord);
 
     }
 
-    public ArrayList<Item> getInventory(){
+    public ArrayList<Item> getInventory() {
         return player.getInventory();
     }
 
-    public Room getCurrentRoom(){
+    public Room getCurrentRoom() {
         return player.getCurrentRoom();
     }
 
-    public boolean go(String direction){
+    public boolean go(String direction) {
         return player.go(direction);
     }
 
@@ -46,7 +41,7 @@ public class Adventure {
         return player.getHealth();
     }
 
-    public boolean eat(String itemWord){
+    public boolean eat(String itemWord) {
         return player.eat(itemWord);
     }
 }

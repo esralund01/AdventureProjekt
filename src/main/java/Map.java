@@ -7,15 +7,15 @@ public class Map {
     public Map() {
 
         // Creating rooms
-        Room room1 = new Room("Room 1","room with no distinct features, except two doors");
-        Room room2 = new Room("Room 2","room with no distinct features, except two doors");
-        Room room3 = new Room("Room 3","room with no distinct features, except two doors");
-        Room room4 = new Room("Room 4","room with no distinct features, except two doors");
-        Room room5 = new Room("Room 5","room with no distinct features, except one door");
-        Room room6 = new Room("Room 6","room with no distinct features, except two doors");
-        Room room7 = new Room("Room 7","room with no distinct features, except two doors");
-        Room room8 = new Room("Room 8","room with no distinct features, except three doors");
-        Room room9 = new Room("Room 9","room with no distinct features, except two doors");
+        Room room1 = new Room("Room 1", "room with no distinct features, except two doors");
+        Room room2 = new Room("Room 2", "room with no distinct features, except two doors");
+        Room room3 = new Room("Room 3", "room with no distinct features, except two doors");
+        Room room4 = new Room("Room 4", "room with no distinct features, except two doors");
+        Room room5 = new Room("Room 5", "room with no distinct features, except one door", true);
+        Room room6 = new Room("Room 6", "room with no distinct features, except two doors", true);
+        Room room7 = new Room("Room 7", "room with no distinct features, except two doors");
+        Room room8 = new Room("Room 8", "room with no distinct features, except three doors", true);
+        Room room9 = new Room("Room 9", "room with no distinct features, except two doors", true);
 
         // Setting first room
         firstRoom = room1;
@@ -32,13 +32,12 @@ public class Map {
         connectNorthSouth(room5, room8);
 
         // Putting items into rooms
-        room1.addItem(new Item("a shiny brass lamp","lamp"));
-        room2.addItem(new Item("a gold knife","knife"));
-        room3.addItem(new Item("a diamond pickaxe","pickaxe"));
-
-        room1.addItem(new Food("a red apple","apple", 10));
-        room2.addItem(new Food("a black apple","black apple", -20));
-        room3.addItem(new Food("a cup of freshly brewed coffee","coffee", 25));
+        room1.addItem(new Item("a shiny brass <lamp>"));
+        room2.addItem(new Item("a gold <knife>"));
+        room3.addItem(new Item("a diamond <pickaxe>"));
+        room1.addItem(new Food("a red <apple>", 10));
+        room2.addItem(new Food("a <black apple>", -20));
+        room3.addItem(new Food("a cup of freshly brewed <coffee>", 25));
     }
 
     // Getter
