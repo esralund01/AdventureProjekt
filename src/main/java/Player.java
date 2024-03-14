@@ -6,11 +6,15 @@ public class Player {
     private final ArrayList<Item> inventory;
     private Room currentRoom;
     private Room previousRoom;
+    private final int maxHealth;
+    private int health;
 
     // Constructor
     public Player(Room firstRoom) {
         currentRoom = firstRoom;
         inventory = new ArrayList<>();
+        maxHealth = 100;
+        health = maxHealth;
     }
 
     // Getters
@@ -19,6 +23,12 @@ public class Player {
     }
     public ArrayList<Item> getInventory() {
         return inventory;
+    }
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+    public int getHealth() {
+        return health;
     }
 
     // Methods

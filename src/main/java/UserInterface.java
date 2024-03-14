@@ -48,12 +48,26 @@ public class UserInterface {
                         }
                     }
                 }
+                case "health" -> {
+                    String message;
+                    int healthPercentage = adventure.getHealth() * 100 / adventure.getMaxHealth();
+                    if (healthPercentage > 75) {
+                        message = "good health and ready to fight";
+                    } else if (healthPercentage > 50) {
+                        message = "good health but avoid fighting right now";
+                    } else if (healthPercentage > 25) {
+                        message = "poor health so avoid fighting right now";
+                    } else {
+                        message = "poor health and close to death";
+                    }
+                    System.out.printf("Your health is %d out of %d. You are in %s.\n", adventure.getHealth(), adventure.getMaxHealth(), message);
+                }
                 // Kommandoer med variable: Pattern matching kræver Java 21.
-                case String s when s.startsWith("go ") -> go(command.substring(3));
+                case String s when s.startsWith("go ") -> go(s.substring(3));
                 case String s when s.startsWith("take ") -> {
                     String item = s.substring(5);
                     if (adventure.take(item)) {
-                        System.out.printf("%s is added to your inventory.\n", item);
+                        System.out.printf("The %s is added to your inventory.\n", item);
                     } else {
                         System.out.printf("Could not find %s in this room.\n", item);
                     }
@@ -61,7 +75,7 @@ public class UserInterface {
                 case String s when s.startsWith("drop ") -> {
                     String item = s.substring(5);
                     if (adventure.drop(item)) {
-                        System.out.printf("%s is removed from inventory.\n", item);
+                        System.out.printf("The %s is removed from your inventory.\n", item);
                     } else {
                         System.out.printf("Could not find %s in your inventory.\n", item);
                     }
@@ -96,6 +110,7 @@ public class UserInterface {
         System.out.println("- 'inventory', 'invent' or 'inv' shows your inventory.");
         System.out.println("- 'take <item>' puts an item in your inventory.");
         System.out.println("- 'drop <item>' removes an item from your inventory.");
+        System.out.println("- 'health' shows your health.");
 
     }
 
