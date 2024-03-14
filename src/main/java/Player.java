@@ -60,6 +60,7 @@ public class Player {
             return false;
         } else {
             inventory.add(found);
+            currentRoom.removeItem(found);
             return true;
         }
     }
@@ -73,5 +74,21 @@ public class Player {
             }
         }
         return false;
+    }
+
+    public boolean eat (String itemWord){
+        Item found = currentRoom.findItem(itemWord);
+        if(found == null){
+            return false;
+        }else {
+            if (found instanceof Food){
+                health += ((Food) found).getHealthPoints();
+                currentRoom.removeItem(found);
+                return true;
+            } else {
+                return false;
+            }
+
+        }
     }
 }

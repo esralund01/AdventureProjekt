@@ -93,11 +93,14 @@ public class Room {
     public Item findItem(String itemWord) {
         for (Item item : items) {
             if (item.getShortName().equals(itemWord)) {
-                items.remove(item);
                 return item;
             }
         }
         return null;
+    }
+
+    public void removeItem (Item item){
+        items.remove(item);
     }
 
 }

@@ -80,6 +80,15 @@ public class UserInterface {
                         System.out.printf("Could not find %s in your inventory.\n", item);
                     }
                 }
+                case String s when s.startsWith("eat ") -> {
+                    String food = s.substring(4);
+
+                    if (adventure.eat(food)) {
+                        System.out.printf("%s has been eaten.\n", food);
+                    } else {
+                        System.out.printf("you cannot eat %s. \n", food);
+                    }
+                }
                 // Kommando, der ikke kunne genkendes.
                 default -> System.out.println("Could no recognize command. Enter 'help' to view available commands.");
             }

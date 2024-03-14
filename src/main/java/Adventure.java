@@ -45,4 +45,8 @@ public class Adventure {
     public int getHealth() {
         return player.getHealth();
     }
+
+    public boolean eat(String itemWord){
+        return player.eat(itemWord);
+    }
 }
