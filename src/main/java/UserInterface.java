@@ -82,9 +82,13 @@ public class UserInterface {
                 }
                 case String s when s.startsWith("eat ") -> {
                     String food = s.substring(4);
+                    int oldHealth = adventure.getHealth();
 
                     if (adventure.eat(food)) {
-                        System.out.printf("%s has been eaten.\n", food);
+                        int healthPoints = adventure.getHealth() - oldHealth;
+                        System.out.printf("%s has been eaten. your health has been changed by: %d  \n", food, healthPoints);
+
+
                     } else {
                         System.out.printf("you cannot eat %s. \n", food);
                     }

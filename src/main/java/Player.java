@@ -76,18 +76,35 @@ public class Player {
         return false;
     }
 
-    public boolean eat (String itemWord){
+    public boolean eat (String itemWord) {
         Item found = currentRoom.findItem(itemWord);
         if(found == null){
-            return false;
+            for (Item item : inventory) {
+                if (item.getShortName().equals(itemWord)) {
+                    if (item instanceof Food) {
+                        health += ((Food) item).getHealthPoints();
+                        if (health > getMaxHealth()) {
+                            health = maxHealth;
+                        }
+                        inventory.remove(item);
+                    }
+
+                    return true;
+                }
+            }
+            return false; // var ikke i rummet OG ikke i inventory
         }else {
             if (found instanceof Food){
                 health += ((Food) found).getHealthPoints();
+                if (health > getMaxHealth()){
+                    health = maxHealth;
+                }
                 currentRoom.removeItem(found);
                 return true;
             } else {
-                return false;
+                return false; // var ikke mad
             }
+
 
         }
     }

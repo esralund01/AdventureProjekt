@@ -37,7 +37,7 @@ public class Map {
         room3.addItem(new Item("a diamond pickaxe","pickaxe"));
 
         room1.addItem(new Food("a red apple","apple", 10));
-        room2.addItem(new Food("a black apple","black-apple", -20));
+        room2.addItem(new Food("a black apple","black apple", -20));
         room3.addItem(new Food("a cup of freshly brewed coffee","coffee", 25));
     }
 
