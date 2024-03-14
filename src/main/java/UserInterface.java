@@ -22,12 +22,17 @@ public class UserInterface {
         adventure.getCurrentRoom().visit();
         while (gameIsRunning) {
             System.out.print("Enter command: ");
-            String[] command = scanner.next().split(" ");
-            switch (command[0]) {
-                case "go" -> go(command[1]);
-                case "n", "e", "w", "s" -> go(command[0]);
+            String command = scanner.next().toLowerCase();
+            switch (command) {
+                // Kommandoer uden variable.
+                case "n", "e", "w", "s" -> go(command);
+                case "exit" -> {
+                    gameIsRunning = false;
+                    System.out.println("Quitting game.");
+                }
+                case "help" -> help();
                 case "look" -> look();
-                case "turn" -> {
+                case "turn on light" -> {
                     adventure.turnOnLight();
                     System.out.println("Turning on light...");
                     look();
@@ -43,25 +48,25 @@ public class UserInterface {
                         }
                     }
                 }
-                case "take" -> {
-                    if (adventure.take(command[1])) {
-                        System.out.printf("%s is added to your inventory.\n", command[1]);
+                // Kommandoer med variable: Pattern matching kræver Java 21.
+                case String s when s.startsWith("go ") -> go(command.substring(3));
+                case String s when s.startsWith("take ") -> {
+                    String item = s.substring(5);
+                    if (adventure.take(item)) {
+                        System.out.printf("%s is added to your inventory.\n", item);
                     } else {
-                        System.out.printf("Could not find %s in this room.\n", command[1]);
+                        System.out.printf("Could not find %s in this room.\n", item);
                     }
                 }
-                case "drop" -> {
-                    if (adventure.drop(command[1])) {
-                        System.out.printf("%s is removed from inventory.\n", command[1]);
+                case String s when s.startsWith("drop ") -> {
+                    String item = s.substring(5);
+                    if (adventure.drop(item)) {
+                        System.out.printf("%s is removed from inventory.\n", item);
                     } else {
-                        System.out.printf("Could not find %s in your inventory.\n", command[1]);
+                        System.out.printf("Could not find %s in your inventory.\n", item);
                     }
                 }
-                case "exit" -> {
-                    gameIsRunning = false;
-                    System.out.println("Quitting game.");
-                }
-                case "help" -> help();
+                // Kommando, der ikke kunne genkendes.
                 default -> System.out.println("Could no recognize command. Enter 'help' to view available commands.");
             }
         }
@@ -82,27 +87,28 @@ public class UserInterface {
         }
     }
 
-    private void look() {
-        System.out.printf("You are in %s", adventure.getCurrentRoom().getName());
-        if (adventure.getCurrentRoom().isDark()) {
-            System.out.println(", a place filled with darkness, except in the direction you came from.");
-        } else {
-            System.out.printf(", a %s", adventure.getCurrentRoom().getDescription());
-            for (Item item : adventure.getCurrentRoom().getItems()) {
-                System.out.printf(", and %s", item.getLongName());
-            }
-            System.out.println(".");
-        }
-    }
-
     private void help() {
         System.out.println("Available commands:");
         System.out.println("- 'go north', 'go n' or 'n' takes you north. This is also available for south, west, and east.");
+        System.out.println("- 'exit' quits the game.");
         System.out.println("- 'look' gives you a description of the place you are in.");
         //System.out.println("- 'turn on light' turns on the light.");
         System.out.println("- 'inventory', 'invent' or 'inv' shows your inventory.");
         System.out.println("- 'take <item>' puts an item in your inventory.");
         System.out.println("- 'drop <item>' removes an item from your inventory.");
-        System.out.println("- 'exit' quits the game.");
+
+    }
+
+    private void look() {
+        System.out.printf("You are in %s, a ", adventure.getCurrentRoom().getName());
+        if (adventure.getCurrentRoom().isDark()) {
+            System.out.println("place filled with darkness, except in the direction you came from.");
+        } else {
+            System.out.print(adventure.getCurrentRoom().getDescription());
+            for (Item item : adventure.getCurrentRoom().getItems()) {
+                System.out.printf(", and %s", item.getLongName());
+            }
+            System.out.println(".");
+        }
     }
 }
