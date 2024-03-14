@@ -35,6 +35,10 @@ public class Map {
         room1.addItem(new Item("a shiny brass lamp","lamp"));
         room2.addItem(new Item("a gold knife","knife"));
         room3.addItem(new Item("a diamond pickaxe","pickaxe"));
+
+        room1.addItem(new Food("a red apple","apple"));
+        room2.addItem(new Food("a black apple","black-apple"));
+        room3.addItem(new Food("a cup of freshly brewed coffee","coffee"));
     }
 
     // Getter
