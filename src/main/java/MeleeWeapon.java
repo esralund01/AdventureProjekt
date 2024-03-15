@@ -1,11 +1,13 @@
-public class MeleeWeapon extends Weapon{
+public class MeleeWeapon extends Weapon {
 
+    // Constructor
     public MeleeWeapon(String longName) {
         super(longName);
     }
 
+    // Weapon method
     @Override
-    public int remainingUses() {
-        return Integer.MAX_VALUE;
+    public boolean canUse() {
+        return true;
     }
 }

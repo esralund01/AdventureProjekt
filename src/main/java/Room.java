@@ -14,7 +14,7 @@ public class Room {
     private boolean isDark;
     private final ArrayList<Item> items;
 
-    // Constructor
+    // Constructors
     public Room(String name, String description) {
         this.name = name;
         this.description = description;

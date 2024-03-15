@@ -7,11 +7,14 @@ public class Item {
     // Constructor
     public Item(String longName) {
         this.longName = longName;
-        if (longName.contains("<") && longName.contains(">")) {
+        String shortName;
+        try {
             shortName = longName.substring(longName.indexOf('<') + 1, longName.indexOf('>'));
-        } else {
+        }
+        catch (IndexOutOfBoundsException ioobe) {
             shortName = longName;
         }
+        this.shortName = shortName;
     }
 
     // Getters

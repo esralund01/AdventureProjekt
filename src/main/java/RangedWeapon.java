@@ -1,15 +1,17 @@
-public class RangedWeapon extends Weapon{
+public class RangedWeapon extends Weapon {
 
-    private int i;
+    // Attribute
+    private int numberOfProjectiles;
 
-    public RangedWeapon(String longName, int i) {
+    // Constructor
+    public RangedWeapon(String longName, int numberOfProjectiles) {
         super(longName);
-        this.i=i;
+        this.numberOfProjectiles = numberOfProjectiles;
     }
 
-
+    // Weapon method
     @Override
-    public int remainingUses() {
-        return i;
+    public boolean canUse() {
+        return numberOfProjectiles > 0;
     }
 }

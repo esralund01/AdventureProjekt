@@ -22,14 +22,21 @@ public class Player {
     public Room getCurrentRoom() {
         return currentRoom;
     }
+
     public ArrayList<Item> getInventory() {
         return inventory;
     }
+
     public int getMaxHealth() {
         return maxHealth;
     }
+
     public int getHealth() {
         return health;
+    }
+
+    public Weapon getEquipped() {
+        return equipped;
     }
 
     // Methods
@@ -57,6 +64,9 @@ public class Player {
 
     public void removeFromInventory(Item item) {
         inventory.remove(item);
+        if (item == equipped) {
+            equipped = null;
+        }
     }
 
     public Item findInInventory(String itemWord) {
@@ -73,10 +83,6 @@ public class Player {
         if (health > maxHealth) {
             health = maxHealth;
         }
-    }
-
-    public Weapon getEquipped() {
-        return equipped;
     }
 
     public void equip(Weapon weapon){

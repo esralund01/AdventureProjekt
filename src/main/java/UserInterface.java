@@ -19,12 +19,13 @@ public class UserInterface {
     // Method
     public void startProgram() {
         gameIsRunning = true;
-        System.out.println("Welcome to AdventureGame!");
+        System.out.println("\nWelcome to AdventureGame!");
         look();
         adventure.getCurrentRoom().visit();
         while (gameIsRunning) {
-            System.out.print("Enter command: ");
+            System.out.print("\nEnter command: ");
             String command = scanner.next().toLowerCase();
+            System.out.println();
             switch (command) {
                 case "n", "e", "w", "s" -> go(command);
                 case "exit" -> exit();
@@ -46,26 +47,36 @@ public class UserInterface {
     }
 
     // Auxiliary methods
+    private String nOrNot(String s) {
+        // Denne metode kan bruges, når man har et ubestemt artikel foran en variabel,
+        // fx "a horse" eller "an apple", men ikke ved om det er "horse" eller "apple",
+        // og derfor ikke ved, som det skal være "a" eller "an".
+        // Metoden tager variablen som parameter og returnerer "n" eller "" (tom string).
+        return s.startsWith("a") || s.startsWith("e") || s.startsWith("i") || s.startsWith("o") ? "n" : "";
+    }
+
     private void exit() {
         gameIsRunning = false;
-        System.out.println("Quitting game.");
+        System.out.println("Quitting game...");
     }
 
     private void help() {
         System.out.println("Available commands:");
-        System.out.println("- 'go north', 'go n' or 'n' takes you north. This is also available for south, west, and east.");
-        System.out.println("- 'exit' quits the game.");
-        System.out.println("- 'look' gives you a description of the place you are in.");
-        System.out.println("- 'turn on/off light' turns on/off the light.");
-        System.out.println("- 'inventory', 'invent' or 'inv' shows your inventory.");
-        System.out.println("- 'take <item>' puts an item in your inventory.");
-        System.out.println("- 'drop <item>' removes an item from your inventory.");
-        System.out.println("- 'health' shows your health.");
-        System.out.println("- 'eat <food>' lets you eat a piece of food to restore health.");
+        System.out.println("  'go <direction>' takes you in that direction if possible. This is available for north, east, west, and south.");
+        System.out.println("  'exit' quits the game.");
+        System.out.println("  'look' gives you a description of the place you are in.");
+        System.out.println("  'turn <on/off> light' turns the light on or off if possible.");
+        System.out.println("  'inventory', 'invent' or 'inv' shows your inventory.");
+        System.out.println("  'take <item>' takes an item from the room into your inventory.");
+        System.out.println("  'drop <item>' removes an item from your inventory and drops it in the place you're in.");
+        System.out.println("  'health' shows your health.");
+        System.out.println("  'eat <food>' lets you eat a piece of food to restore health. Be weary though.");
+        System.out.println("  'equip <weapon>' lets you equip a weapon from your inventory, so you can use it.");
+        System.out.println("Don't include ' or < or > or / in your command.");
     }
 
     private void look() {
-        System.out.printf("You are in %s, a %s.\n", adventure.getCurrentRoom().getName(), adventure.getCurrentRoom().getDescription());
+        System.out.printf("You are in %s, a%s %s.\n", adventure.getCurrentRoom().getName(), nOrNot(adventure.getCurrentRoom().getDescription()), adventure.getCurrentRoom().getDescription());
     }
 
     private void turnLight(boolean on) {
@@ -89,10 +100,7 @@ public class UserInterface {
         } else {
             System.out.println("Your inventory contains:");
             for (Item item : inventory) {
-                System.out.printf("- %s.\n", item.getLongName());
-                if (item == adventure.getEquipped()) {
-                    System.out.printf("%s is equipped\n", item.getLongName());
-                }
+                System.out.printf("  %s%s\n", item.getLongName(), item == adventure.getEquipped() ? "  <--- equipped and ready to use" : "");
             }
         }
     }
@@ -129,7 +137,7 @@ public class UserInterface {
                 adventure.getCurrentRoom().visit();
             }
         } else {
-            System.out.println("Cannot go that way.");
+            System.out.println("You cannot go that way.");
         }
     }
 
@@ -138,10 +146,11 @@ public class UserInterface {
         if (found != null) {
             adventure.getCurrentRoom().removeFromRoom(found);
             adventure.addToInventory(found);
-            System.out.printf("The %s has been moved to your inventory.\n", itemWord);
+            System.out.printf("The %s has been moved to your inventory", itemWord);
         } else {
-            System.out.printf("Could not find '%s' in %s.\n", itemWord, adventure.getCurrentRoom().getName());
+            System.out.printf("Could not find '%s' in %s", itemWord, adventure.getCurrentRoom().getName());
         }
+        System.out.println(".");
     }
 
     private void drop(String itemWord) {
@@ -149,17 +158,18 @@ public class UserInterface {
         if (found != null) {
             adventure.removeFromInventory(found);
             adventure.getCurrentRoom().addToRoom(found);
-            System.out.printf("The %s has been removed from your inventory and dropped in %s.\n", itemWord, adventure.getCurrentRoom().getName());
+            System.out.printf("The %s has been removed from your inventory and dropped in %s", itemWord, adventure.getCurrentRoom().getName());
         } else {
-            System.out.printf("Could not find '%s' in your inventory.\n", itemWord);
+            System.out.printf("Could not find '%s' in your inventory", itemWord);
         }
+        System.out.println(".");
     }
 
     private void eat(String itemWord) {
         Item foundInRoom = adventure.getCurrentRoom().findInRoom(itemWord);
         Item foundInInventory = adventure.findInInventory(itemWord);
         if (foundInRoom == null && foundInInventory == null) {
-            System.out.printf("Could not find '%s' in %s or your inventory.\n", itemWord, adventure.getCurrentRoom().getName());
+            System.out.printf("Could not find '%s' in %s or your inventory", itemWord, adventure.getCurrentRoom().getName());
         } else {
             Food food = null;
             if (foundInRoom instanceof Food) {
@@ -170,11 +180,11 @@ public class UserInterface {
                 adventure.removeFromInventory(foundInInventory);
             }
             if (food == null) {
-                System.out.printf("A %s isn't edible.\n", itemWord);
+                System.out.printf("A%s %s isn't edible", nOrNot(itemWord), itemWord);
             } else {
                 int oldHealth = adventure.getHealth();
                 adventure.eat(food);
-                System.out.printf("Eats %s...\n", itemWord);
+                System.out.printf("Eating %s...\n", itemWord);
                 int healthPoints = adventure.getHealth() - oldHealth;
                 if (healthPoints > 0) {
                     System.out.printf("Your health has increased by %d", healthPoints);
@@ -183,26 +193,22 @@ public class UserInterface {
                 } else {
                     System.out.print("Your health is unchanged, but your stomach is fuller");
                 }
-                System.out.println(".");
             }
         }
+        System.out.println(".");
     }
     private void equip(String itemWord){
-        Item foundInInventory = adventure.findInInventory(itemWord);
-        if (foundInInventory == null) {
-            System.out.printf("Could not find '%s' in your inventory.\n", itemWord);
+        Item item = adventure.findInInventory(itemWord);
+        if (item == null) {
+            System.out.printf("Could not find '%s' in your inventory", itemWord);
         } else {
-            Weapon weapon = null;
-
-            if (foundInInventory instanceof Weapon) {
-                weapon = (Weapon) foundInInventory;
-            }
-            if (weapon == null) {
-                System.out.printf("A %s isn't a weapon.\n", itemWord);
+            if (item instanceof Weapon) {
+                adventure.equip((Weapon) item);
+                System.out.printf("Your %s is equipped and ready to use", itemWord);
             } else {
-                adventure.equip(weapon);
-                System.out.printf("%s is equipped.\n", itemWord);
+                System.out.printf("A%s %s is not a weapon", nOrNot(itemWord), itemWord);
             }
         }
+        System.out.println(".");
     }
 }

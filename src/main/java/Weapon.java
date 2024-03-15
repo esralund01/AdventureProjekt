@@ -1,9 +1,10 @@
-public abstract class Weapon extends Item{
+public abstract class Weapon extends Item {
 
+    // Constructor
     public Weapon(String longName) {
         super(longName);
     }
 
-    public abstract int remainingUses(); //abstract har ingen "krop"
-
+    // Abstract method
+    public abstract boolean canUse(); // Abstract metoder har ingen {krop}.
 }
