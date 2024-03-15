@@ -103,11 +103,11 @@ public class Room {
         return false;
     }
 
-    public void addItem(Item item) {
+    public void addToRoom(Item item) {
         items.add(item);
     }
 
-    public Item findItem(String itemWord) {
+    public Item findInRoom(String itemWord) {
         for (Item item : items) {
             if (item.getShortName().equals(itemWord)) {
                 return item;
@@ -116,8 +116,7 @@ public class Room {
         return null;
     }
 
-    public void removeItem (Item item) {
+    public void removeFromRoom(Item item) {
         items.remove(item);
     }
-
 }

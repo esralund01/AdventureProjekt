@@ -50,56 +50,27 @@ public class Player {
         }
     }
 
-    public boolean take(String itemWord) {
-        Item found = currentRoom.findItem(itemWord);
-        if (found == null) {
-            return false;
-        } else {
-            inventory.add(found);
-            currentRoom.removeItem(found);
-            return true;
-        }
+    public void addToInventory(Item item) {
+        inventory.add(item);
     }
 
-    public boolean drop(String itemWord) {
+    public void removeFromInventory(Item item) {
+        inventory.remove(item);
+    }
+
+    public Item findInInventory(String itemWord) {
         for (Item item : inventory) {
             if (item.getShortName().equals(itemWord)) {
-                inventory.remove(item);
-                currentRoom.addItem(item);
-                return true;
+                return item;
             }
         }
-        return false;
+        return null;
     }
 
-    public boolean eat(String itemWord) {
-        // Erklærer (declares) variablen 'food'.
-        Food food = null;
-        // Leder efter søgeordet i rummet.
-        Item itemFromRoom = currentRoom.findItem(itemWord);
-        // Hvis mad bliver fundet i rummet, så bliver det tildelt (assigned) til 'food'. Her er null-tjek inkluderet i instanceof.
-        if (itemFromRoom instanceof Food) {
-            food = (Food) itemFromRoom;
-            currentRoom.removeItem(itemFromRoom);
+    public void eat(Food food) {
+        health += food.getHealthPoints();
+        if (health > maxHealth) {
+            health = maxHealth;
         }
-        // Hvis ikke, ledes efter søgeordet i inventory.
-        else {
-            for (Item itemFromInventory : inventory) {
-                if (itemFromInventory.getShortName().equals(itemWord) && itemFromInventory instanceof Food) {
-                    food = (Food) itemFromInventory;
-                    inventory.remove(itemFromInventory);
-                    break; // Stopper for-loopet.
-                }
-            }
-        }
-        // Hvis der blev fundet mad.
-        if (food != null) {
-            health += food.getHealthPoints();
-            if (health > maxHealth) {
-                health = maxHealth;
-            }
-            return true;
-        }
-        return false;
     }
 }

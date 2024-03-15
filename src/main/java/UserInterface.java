@@ -130,7 +130,10 @@ public class UserInterface {
     }
 
     private void take(String itemWord) {
-        if (adventure.take(itemWord)) {
+        Item found = adventure.getCurrentRoom().findInRoom(itemWord);
+        if (found != null) {
+            adventure.getCurrentRoom().removeFromRoom(found);
+            adventure.addToInventory(found);
             System.out.printf("The %s has been moved to your inventory.\n", itemWord);
         } else {
             System.out.printf("Could not find '%s' in %s.\n", itemWord, adventure.getCurrentRoom().getName());
@@ -138,7 +141,10 @@ public class UserInterface {
     }
 
     private void drop(String itemWord) {
-        if (adventure.drop(itemWord)) {
+        Item found = adventure.findInInventory(itemWord);
+        if (found != null) {
+            adventure.removeFromInventory(found);
+            adventure.getCurrentRoom().addToRoom(found);
             System.out.printf("The %s has been removed from your inventory and dropped in %s.\n", itemWord, adventure.getCurrentRoom().getName());
         } else {
             System.out.printf("Could not find '%s' in your inventory.\n", itemWord);
@@ -146,20 +152,35 @@ public class UserInterface {
     }
 
     private void eat(String itemWord) {
-        int oldHealth = adventure.getHealth();
-        if (adventure.eat(itemWord)) {
-            System.out.printf("Eats %s...\n", itemWord);
-            int healthPoints = adventure.getHealth() - oldHealth;
-            if (healthPoints > 0) {
-                System.out.printf("Your health has increased by %d", healthPoints);
-            } else if (healthPoints < 0) {
-                System.out.printf("That wasn't good for you. Your health has decreased by %d", healthPoints * -1);
-            } else {
-                System.out.print("Your health is unchanged, but your stomach is fuller");
-            }
-            System.out.println(".");
+        Item foundInRoom = adventure.getCurrentRoom().findInRoom(itemWord);
+        Item foundInInventory = adventure.findInInventory(itemWord);
+        if (foundInRoom == null && foundInInventory == null) {
+            System.out.printf("Could not find '%s' in %s or your inventory.\n", itemWord, adventure.getCurrentRoom().getName());
         } else {
-            System.out.printf("'%s' wasn't edible or could not be found in %s or your inventory.\n", itemWord, adventure.getCurrentRoom().getName());
+            Food food = null;
+            if (foundInRoom instanceof Food) {
+                food = (Food) foundInRoom;
+                adventure.getCurrentRoom().removeFromRoom(foundInRoom);
+            } else if (foundInInventory instanceof Food) {
+                food = (Food) foundInInventory;
+                adventure.removeFromInventory(foundInInventory);
+            }
+            if (food == null) {
+                System.out.printf("A %s isn't edible.\n", itemWord);
+            } else {
+                int oldHealth = adventure.getHealth();
+                adventure.eat(food);
+                System.out.printf("Eats %s...\n", itemWord);
+                int healthPoints = adventure.getHealth() - oldHealth;
+                if (healthPoints > 0) {
+                    System.out.printf("Your health has increased by %d", healthPoints);
+                } else if (healthPoints < 0) {
+                    System.out.printf("That wasn't good for you. Your health has decreased by %d", healthPoints * -1);
+                } else {
+                    System.out.print("Your health is unchanged, but your stomach is fuller");
+                }
+                System.out.println(".");
+            }
         }
     }
 }

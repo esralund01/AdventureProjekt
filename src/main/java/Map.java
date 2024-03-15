@@ -32,12 +32,12 @@ public class Map {
         connectNorthSouth(room5, room8);
 
         // Putting items into rooms
-        room1.addItem(new Item("a shiny brass <lamp>"));
-        room2.addItem(new Item("a gold <knife>"));
-        room3.addItem(new Item("a diamond <pickaxe>"));
-        room1.addItem(new Food("a red <apple>", 10));
-        room2.addItem(new Food("a <black apple>", -20));
-        room3.addItem(new Food("a cup of freshly brewed <coffee>", 25));
+        room1.addToRoom(new Item("a shiny brass <lamp>"));
+        room2.addToRoom(new Item("a gold <knife>"));
+        room3.addToRoom(new Item("a diamond <pickaxe>"));
+        room1.addToRoom(new Food("a red <apple>", 10));
+        room2.addToRoom(new Food("a <black apple>", -20));
+        room3.addToRoom(new Food("a cup of freshly brewed <coffee>", 25));
     }
 
     // Getter

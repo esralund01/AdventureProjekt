@@ -11,13 +11,16 @@ public class Adventure {
     }
 
     // Methods
-    public boolean take(String itemWord) {
-       return player.take(itemWord);
-
+    public void addToInventory(Item item) {
+        player.addToInventory(item);
     }
 
-    public boolean drop(String itemWord) {
-        return player.drop(itemWord);
+    public void removeFromInventory(Item item) {
+        player.removeFromInventory(item);
+    }
+
+    public Item findInInventory(String itemWord) {
+        return player.findInInventory(itemWord);
 
     }
 
@@ -41,7 +44,7 @@ public class Adventure {
         return player.getHealth();
     }
 
-    public boolean eat(String itemWord) {
-        return player.eat(itemWord);
+    public void eat(Food food) {
+        player.eat(food);
     }
 }
