@@ -33,11 +33,13 @@ public class Map {
 
         // Putting items into rooms
         room1.addToRoom(new Item("a shiny brass <lamp>"));
-        room2.addToRoom(new Item("a gold <knife>"));
-        room3.addToRoom(new Item("a diamond <pickaxe>"));
+        room2.addToRoom(new MeleeWeapon("a gold <knife>"));
+        room3.addToRoom(new MeleeWeapon("a diamond <pickaxe>"));
         room1.addToRoom(new Food("a red <apple>", 10));
         room2.addToRoom(new Food("a <black apple>", -20));
         room3.addToRoom(new Food("a cup of freshly brewed <coffee>", 25));
+        room1.addToRoom(new RangedWeapon("a black <pistol>", 6));
+        room2.addToRoom(new RangedWeapon("a <bow> and arrows",10));
     }
 
     // Getter

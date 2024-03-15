@@ -47,4 +47,12 @@ public class Adventure {
     public void eat(Food food) {
         player.eat(food);
     }
+
+    public void equip(Weapon weapon){
+        player.equip(weapon);
+    }
+
+    public Weapon getEquipped() {
+        return player.getEquipped();
+    }
 }

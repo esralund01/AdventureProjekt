@@ -8,6 +8,7 @@ public class Player {
     private Room previousRoom;
     private final int maxHealth;
     private int health;
+    private Weapon equipped;
 
     // Constructor
     public Player(Room firstRoom) {
@@ -72,5 +73,13 @@ public class Player {
         if (health > maxHealth) {
             health = maxHealth;
         }
+    }
+
+    public Weapon getEquipped() {
+        return equipped;
+    }
+
+    public void equip(Weapon weapon){
+        equipped = weapon;
     }
 }

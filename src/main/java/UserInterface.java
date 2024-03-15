@@ -39,6 +39,7 @@ public class UserInterface {
                 case String s when s.startsWith("take ") -> take(s.substring(5));
                 case String s when s.startsWith("drop ") -> drop(s.substring(5));
                 case String s when s.startsWith("eat ") -> eat(s.substring(4));
+                case String s when s.startsWith("equip ") -> equip(s.substring(6));
                 default -> System.out.printf("Could not recognize '%s'. Enter 'help' to view available commands.\n", command);
             }
         }
@@ -89,6 +90,9 @@ public class UserInterface {
             System.out.println("Your inventory contains:");
             for (Item item : inventory) {
                 System.out.printf("- %s.\n", item.getLongName());
+                if (item == adventure.getEquipped()) {
+                    System.out.printf("%s is equipped\n", item.getLongName());
+                }
             }
         }
     }
@@ -180,6 +184,24 @@ public class UserInterface {
                     System.out.print("Your health is unchanged, but your stomach is fuller");
                 }
                 System.out.println(".");
+            }
+        }
+    }
+    private void equip(String itemWord){
+        Item foundInInventory = adventure.findInInventory(itemWord);
+        if (foundInInventory == null) {
+            System.out.printf("Could not find '%s' in your inventory.\n", itemWord);
+        } else {
+            Weapon weapon = null;
+
+            if (foundInInventory instanceof Weapon) {
+                weapon = (Weapon) foundInInventory;
+            }
+            if (weapon == null) {
+                System.out.printf("A %s isn't a weapon.\n", itemWord);
+            } else {
+                adventure.equip(weapon);
+                System.out.printf("%s is equipped.\n", itemWord);
             }
         }
     }
