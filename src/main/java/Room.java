@@ -14,20 +14,21 @@ public class Room {
     private boolean isDark;
     private final ArrayList<Item> items;
 
-    // Constructors
+    // Constructor 1: Rum uden lys/mørke-funktion.
     public Room(String name, String description) {
         this.name = name;
         this.description = description;
-        hasLights = false;
+        hasLights = false; // Slået fra.
         isDark = false;
         isAlreadyVisited = false;
         items = new ArrayList<>();
     }
 
+    // Constructor 2: Rum med lys/mørke-funktion. Her vælger man om rummet er mørkt eller ej fra starten.
     public Room(String name, String description, boolean isDark) {
         this.name = name;
         this.description = description;
-        hasLights = true;
+        hasLights = true; // Slået til.
         this.isDark = isDark;
         isAlreadyVisited = false;
         items = new ArrayList<>();

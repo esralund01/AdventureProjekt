@@ -6,6 +6,7 @@ public class Player {
     private final ArrayList<Item> inventory;
     private Room currentRoom;
     private Room previousRoom;
+    private Room portalRoom;
     private final int maxHealth;
     private int health;
     private Weapon equipped;
@@ -13,6 +14,7 @@ public class Player {
     // Constructor
     public Player(Room firstRoom) {
         currentRoom = firstRoom;
+        portalRoom = currentRoom;
         inventory = new ArrayList<>();
         maxHealth = 100;
         health = maxHealth;
@@ -40,6 +42,12 @@ public class Player {
     }
 
     // Methods
+    public void teleport() {
+        Room teleportedFrom = currentRoom;
+        currentRoom = portalRoom;
+        portalRoom = teleportedFrom;
+    }
+
     public boolean go(String direction) {
         // go er en kopi af move fra Signes PowerPoint på Fronter men med "Darkness, imprison me!" tilføjet.
         Room desiredRoom = switch (direction) {
@@ -78,14 +86,22 @@ public class Player {
         return null;
     }
 
-    public void eat(Food food) {
-        health += food.getHealthPoints();
-        if (health > maxHealth) {
-            health = maxHealth;
+    public boolean eat(Item item) {
+        if (item instanceof Food) {
+            health += ((Food) item).getHealthPoints();
+            if (health > maxHealth) {
+                health = maxHealth;
+            }
+            return true;
         }
+        return false;
     }
 
-    public void equip(Weapon weapon){
-        equipped = weapon;
+    public boolean equip(Item item){
+        if (item instanceof Weapon) {
+            equipped = (Weapon) item;
+            return true;
+        }
+        return false;
     }
 }

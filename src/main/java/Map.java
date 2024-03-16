@@ -39,7 +39,7 @@ public class Map {
         room2.addToRoom(new Food("a <black apple>", -20));
         room3.addToRoom(new Food("a cup of freshly brewed <coffee>", 25));
         room1.addToRoom(new RangedWeapon("a black <pistol>", 6));
-        room2.addToRoom(new RangedWeapon("a <bow> and arrows",10));
+        room2.addToRoom(new RangedWeapon("a <bow> and arrows", 10));
     }
 
     // Getter

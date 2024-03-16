@@ -19,20 +19,20 @@ public class UserInterface {
     // Method
     public void startProgram() {
         gameIsRunning = true;
-        System.out.println("\nWelcome to AdventureGame!");
+        System.out.printf("\n%s          Welcome to          \n%s          ADVENTURE           %s\n%s           the game           %s\n\n", TextStyle.YELLOW_FG + TextStyle.FRAMED, TextStyle.RESET_FRAMED + TextStyle.INVERT + TextStyle.BOLD, TextStyle.RESET_BOLD + TextStyle.RESET_INVERT, TextStyle.FRAMED, TextStyle.RESET);
         look();
         adventure.getCurrentRoom().visit();
         while (gameIsRunning) {
-            System.out.print("\nEnter command: ");
+            System.out.printf("\n%sEnter command:%s ", TextStyle.LIGHT_BLACK_FG, TextStyle.RESET);
             String command = scanner.next().toLowerCase();
             System.out.println();
             switch (command) {
                 case "n", "e", "w", "s" -> go(command);
                 case "exit" -> exit();
-                case "help" -> help();
                 case "look" -> look();
                 case "turn on light" -> turnLight(true);
                 case "turn off light" -> turnLight(false);
+                case "xyzzy" -> xyzzy();
                 case "inventory", "invent", "inv" -> inventory();
                 case "health" -> health();
                 // Kommandoer med variable: Pattern matching kræver Java 21.
@@ -41,7 +41,8 @@ public class UserInterface {
                 case String s when s.startsWith("drop ") -> drop(s.substring(5));
                 case String s when s.startsWith("eat ") -> eat(s.substring(4));
                 case String s when s.startsWith("equip ") -> equip(s.substring(6));
-                default -> System.out.printf("Could not recognize '%s'. Enter 'help' to view available commands.\n", command);
+                case String s when s.contains("help") -> help(); // Så er vi i hvert fald helt sikre på, at man kan få hjælp.
+                default -> System.out.printf("Could not recognize '%s'. Enter %shelp%s to view available commands.\n", command, TextStyle.GREEN_FG, TextStyle.RESET);
             }
         }
     }
@@ -51,8 +52,8 @@ public class UserInterface {
         // Denne metode kan bruges, når man har et ubestemt artikel foran en variabel,
         // fx "a horse" eller "an apple", men ikke ved om det er "horse" eller "apple",
         // og derfor ikke ved, som det skal være "a" eller "an".
-        // Metoden tager variablen som parameter og returnerer "n" eller "" (tom string).
-        return s.startsWith("a") || s.startsWith("e") || s.startsWith("i") || s.startsWith("o") ? "n" : "";
+        // Metoden tager variablen som parameter og returnerer "n" foran a, e, i og o, "(n)" foran u og ellers "" (tom string).
+        return s.startsWith("a") || s.startsWith("e") || s.startsWith("i") || s.startsWith("o") ? "n" : s.startsWith("u") ? "(n)" : "";
     }
 
     private void exit() {
@@ -61,18 +62,23 @@ public class UserInterface {
     }
 
     private void help() {
-        System.out.println("Available commands:");
-        System.out.println("  'go <direction>' takes you in that direction if possible. This is available for north, east, west, and south.");
-        System.out.println("  'exit' quits the game.");
-        System.out.println("  'look' gives you a description of the place you are in.");
-        System.out.println("  'turn <on/off> light' turns the light on or off if possible.");
-        System.out.println("  'inventory', 'invent' or 'inv' shows your inventory.");
-        System.out.println("  'take <item>' takes an item from the room into your inventory.");
-        System.out.println("  'drop <item>' removes an item from your inventory and drops it in the place you're in.");
-        System.out.println("  'health' shows your health.");
-        System.out.println("  'eat <food>' lets you eat a piece of food to restore health. Be weary though.");
-        System.out.println("  'equip <weapon>' lets you equip a weapon from your inventory, so you can use it.");
-        System.out.println("Don't include ' or < or > or / in your command.");
+        System.out.println(TextStyle.format("{Available commands}"));
+        ArrayList<String> commands = new ArrayList<>();
+        commands.add("[exit] quits the game.");
+        commands.add("[look] gives you a description of the place you are in.");
+        commands.add("[inventory] shows your inventory.");
+        commands.add("[health] shows your health.");
+        commands.add("[go] <_> takes you in the selected direction if possible. Available directions are <north>, <east>, <west>, and <south>.");
+        commands.add("[take] <_> moves the selected item to your inventory.");
+        commands.add("[drop] <_> removes the selected item from your inventory and drops it in the place you're in.");
+        commands.add("[eat] <_> lets you eat the selected food to restore health.");
+        commands.add("[equip] <_> lets you equip the selected weapon for combat.");
+        commands.add("[turn] <_> [light] turns the light <on> or <off> if possible.");
+        for (String command : commands) {
+            command = TextStyle.format(command);
+            System.out.println("  " + command);
+        }
+        System.out.println("Commands are shown in green and selectables are shown in yellow.");
     }
 
     private void look() {
@@ -93,14 +99,20 @@ public class UserInterface {
         }
     }
 
+    private void xyzzy() {
+        adventure.teleport();
+        System.out.println("A magic portal opens and you go through it...");
+        System.out.printf("You are in %s again.\n", adventure.getCurrentRoom().getName());
+    }
+
     private void inventory() {
         ArrayList<Item> inventory = adventure.getInventory();
         if (inventory.isEmpty()) {
             System.out.println("Your inventory is empty.");
         } else {
-            System.out.println("Your inventory contains:");
+            System.out.println(TextStyle.format("{Inventory}"));
             for (Item item : inventory) {
-                System.out.printf("  %s%s\n", item.getLongName(), item == adventure.getEquipped() ? "  <--- equipped and ready to use" : "");
+                System.out.println("  " + item.getLongName() + (item == adventure.getEquipped() ? ", equipped and ready for combat" : ""));
             }
         }
     }
@@ -169,42 +181,37 @@ public class UserInterface {
         Item foundInRoom = adventure.getCurrentRoom().findInRoom(itemWord);
         Item foundInInventory = adventure.findInInventory(itemWord);
         if (foundInRoom == null && foundInInventory == null) {
-            System.out.printf("Could not find '%s' in %s or your inventory", itemWord, adventure.getCurrentRoom().getName());
+            System.out.printf("Could not find '%s' in %s or your inventory.\n", itemWord, adventure.getCurrentRoom().getName());
+            return; // Kan bruges til at stoppe her og ikke gå videre i metodens krop.
+        }
+        int oldHealth = adventure.getHealth();
+        if (adventure.eat(foundInRoom)) {
+            adventure.getCurrentRoom().removeFromRoom(foundInRoom);
+        } else if (adventure.eat(foundInInventory)) {
+            adventure.removeFromInventory(foundInInventory);
         } else {
-            Food food = null;
-            if (foundInRoom instanceof Food) {
-                food = (Food) foundInRoom;
-                adventure.getCurrentRoom().removeFromRoom(foundInRoom);
-            } else if (foundInInventory instanceof Food) {
-                food = (Food) foundInInventory;
-                adventure.removeFromInventory(foundInInventory);
-            }
-            if (food == null) {
-                System.out.printf("A%s %s isn't edible", nOrNot(itemWord), itemWord);
-            } else {
-                int oldHealth = adventure.getHealth();
-                adventure.eat(food);
-                System.out.printf("Eating %s...\n", itemWord);
-                int healthPoints = adventure.getHealth() - oldHealth;
-                if (healthPoints > 0) {
-                    System.out.printf("Your health has increased by %d", healthPoints);
-                } else if (healthPoints < 0) {
-                    System.out.printf("That wasn't good for you. Your health has decreased by %d", healthPoints * -1);
-                } else {
-                    System.out.print("Your health is unchanged, but your stomach is fuller");
-                }
-            }
+            System.out.printf("A%s %s isn't edible.\n", nOrNot(itemWord), itemWord);
+            return; // Kan bruges til at stoppe her og ikke gå videre i metodens krop.
+        }
+        System.out.printf("Eating the %s...\n", itemWord);
+        int healthPoints = adventure.getHealth() - oldHealth;
+        if (healthPoints > 0) {
+            System.out.printf("Your health has increased by %d", healthPoints);
+        } else if (healthPoints < 0) {
+            System.out.printf("That wasn't good for you. Your health has decreased by %d", healthPoints * -1);
+        } else {
+            System.out.print("Your health is unchanged, but your stomach is fuller");
         }
         System.out.println(".");
     }
-    private void equip(String itemWord){
+
+    private void equip(String itemWord) {
         Item item = adventure.findInInventory(itemWord);
         if (item == null) {
             System.out.printf("Could not find '%s' in your inventory", itemWord);
         } else {
-            if (item instanceof Weapon) {
-                adventure.equip((Weapon) item);
-                System.out.printf("Your %s is equipped and ready to use", itemWord);
+            if (adventure.equip(item)) {
+                System.out.printf("Your %s is equipped and ready for combat", itemWord);
             } else {
                 System.out.printf("A%s %s is not a weapon", nOrNot(itemWord), itemWord);
             }

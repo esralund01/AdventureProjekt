@@ -11,6 +11,9 @@ public class Adventure {
     }
 
     // Methods
+    public void teleport() {
+        player.teleport();
+    }
     public void addToInventory(Item item) {
         player.addToInventory(item);
     }
@@ -44,12 +47,12 @@ public class Adventure {
         return player.getHealth();
     }
 
-    public void eat(Food food) {
-        player.eat(food);
+    public boolean eat(Item item) {
+        return player.eat(item);
     }
 
-    public void equip(Weapon weapon) {
-        player.equip(weapon);
+    public boolean equip(Item item) {
+        return player.equip(item);
     }
 
     public Weapon getEquipped() {
