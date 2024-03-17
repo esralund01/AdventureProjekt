@@ -52,8 +52,9 @@ public class UserInterface {
         // Denne metode kan bruges, når man har et ubestemt artikel foran en variabel,
         // fx "a horse" eller "an apple", men ikke ved om det er "horse" eller "apple",
         // og derfor ikke ved, som det skal være "a" eller "an".
-        // Metoden tager variablen som parameter og returnerer "n" foran a, e, i og o, "(n)" foran u og ellers "" (tom string).
-        return s.startsWith("a") || s.startsWith("e") || s.startsWith("i") || s.startsWith("o") ? "n" : s.startsWith("u") ? "(n)" : "";
+        // Metoden tager variablen som parameter og returnerer "n " + variabel foran a, e, i og o, "(n) " + variabel foran u og ellers " " + variabel.
+        // Man kan derfor skrive A + nOrNot(variabel) eller a + nOrNot(variabel), så kommer der måske et n samt et mellemrum.
+        return (s.startsWith("a") || s.startsWith("e") || s.startsWith("i") || s.startsWith("o") ? "n " : s.startsWith("u") ? "(n) " : " ") + s;
     }
 
     private void exit() {
@@ -82,7 +83,7 @@ public class UserInterface {
     }
 
     private void look() {
-        System.out.printf("You are in %s, a%s %s.\n", adventure.getCurrentRoom().getName(), nOrNot(adventure.getCurrentRoom().getDescription()), adventure.getCurrentRoom().getDescription());
+        System.out.printf("You are in %s, a%s.\n", adventure.getCurrentRoom().getName(), nOrNot(adventure.getCurrentRoom().getDescription()));
     }
 
     private void turnLight(boolean on) {
@@ -190,7 +191,7 @@ public class UserInterface {
         } else if (adventure.eat(foundInInventory)) {
             adventure.removeFromInventory(foundInInventory);
         } else {
-            System.out.printf("A%s %s isn't edible.\n", nOrNot(itemWord), itemWord);
+            System.out.printf("A%s isn't edible.\n", nOrNot(itemWord));
             return; // Kan bruges til at stoppe her og ikke gå videre i metodens krop.
         }
         System.out.printf("Eating the %s...\n", itemWord);
@@ -213,7 +214,7 @@ public class UserInterface {
             if (adventure.equip(item)) {
                 System.out.printf("Your %s is equipped and ready for combat", itemWord);
             } else {
-                System.out.printf("A%s %s is not a weapon", nOrNot(itemWord), itemWord);
+                System.out.printf("A%s is not a weapon", nOrNot(itemWord));
             }
         }
         System.out.println(".");
