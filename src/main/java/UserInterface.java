@@ -75,6 +75,7 @@ public class UserInterface {
         commands.add("[take] <_> moves the selected item to your inventory.");
         commands.add("[drop] <_> removes the selected item from your inventory and drops it in the place you're in.");
         commands.add("[eat] <_> lets you eat the selected food to restore health.");
+        commands.add("[drink] <_> lets you drink the selected liquid to restore health.");
         commands.add("[equip] <_> lets you equip the selected weapon for combat.");
         commands.add("[turn] <_> [light] turns the light <on> or <off> if possible.");
         for (String command : commands) {
