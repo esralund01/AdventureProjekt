@@ -97,6 +97,17 @@ public class Player {
         return false;
     }
 
+    public boolean drink(Item item) {
+        if (item instanceof Liquid) {
+            health += ((Liquid) item).getHealthPoints();
+            if (health > maxHealth) {
+                health = maxHealth;
+            }
+            return true;
+        }
+        return false;
+    }
+
     public boolean equip(Item item){
         if (item instanceof Weapon) {
             equipped = (Weapon) item;

@@ -51,6 +51,10 @@ public class Adventure {
         return player.eat(item);
     }
 
+    public boolean drink(Item item) {
+        return player.drink(item);
+    }
+
     public boolean equip(Item item) {
         return player.equip(item);
     }

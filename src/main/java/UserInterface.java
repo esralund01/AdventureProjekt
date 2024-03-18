@@ -41,6 +41,7 @@ public class UserInterface {
                 case String s when s.startsWith("take ") -> take(s.substring(5));
                 case String s when s.startsWith("drop ") -> drop(s.substring(5));
                 case String s when s.startsWith("eat ") -> eat(s.substring(4));
+                case String s when s.startsWith("drink ") -> drink(s.substring(6));
                 case String s when s.startsWith("equip ") -> equip(s.substring(6));
                 case String s when s.contains("help") -> help(); // Så er vi i hvert fald helt sikre på, at man kan få hjælp.
                 default -> System.out.printf("Could not recognize '%s'. Enter %shelp%s to view available commands.\n", command, TextStyle.GREEN_FG, TextStyle.RESET);
@@ -196,6 +197,34 @@ public class UserInterface {
             return; // Kan bruges til at stoppe her og ikke gå videre i metodens krop.
         }
         System.out.printf("Eating the %s...\n", itemWord);
+        int healthPoints = adventure.getHealth() - oldHealth;
+        if (healthPoints > 0) {
+            System.out.printf("Your health has increased by %d", healthPoints);
+        } else if (healthPoints < 0) {
+            System.out.printf("That wasn't good for you. Your health has decreased by %d", healthPoints * -1);
+        } else {
+            System.out.print("Your health is unchanged, but your stomach is fuller");
+        }
+        System.out.println(".");
+    }
+
+    private void drink(String itemWord) {
+        Item foundInRoom = adventure.getCurrentRoom().findInRoom(itemWord);
+        Item foundInInventory = adventure.findInInventory(itemWord);
+        if (foundInRoom == null && foundInInventory == null) {
+            System.out.printf("Could not find '%s' in %s or your inventory.\n", itemWord, adventure.getCurrentRoom().getName());
+            return; // Kan bruges til at stoppe her og ikke gå videre i metodens krop.
+        }
+        int oldHealth = adventure.getHealth();
+        if (adventure.drink(foundInRoom)) {
+            adventure.getCurrentRoom().removeFromRoom(foundInRoom);
+        } else if (adventure.drink(foundInInventory)) {
+            adventure.removeFromInventory(foundInInventory);
+        } else {
+            System.out.printf("A%s isn't edible.\n", nOrNot(itemWord));
+            return; // Kan bruges til at stoppe her og ikke gå videre i metodens krop.
+        }
+        System.out.printf("Drinking the %s...\n", itemWord);
         int healthPoints = adventure.getHealth() - oldHealth;
         if (healthPoints > 0) {
             System.out.printf("Your health has increased by %d", healthPoints);
