@@ -63,7 +63,7 @@ public class UserInterface {
     }
 
     private void help() {
-        System.out.println(TextStyle.format("{Available commands}"));
+        System.out.println("Available commands:");
         ArrayList<String> commands = new ArrayList<>();
         commands.add("[exit] quits the game.");
         commands.add("[look] gives you a description of the place you are in.");
@@ -111,7 +111,7 @@ public class UserInterface {
         if (inventory.isEmpty()) {
             System.out.println("Your inventory is empty.");
         } else {
-            System.out.println(TextStyle.format("{Inventory}"));
+            System.out.println("Your inventory contains:");
             for (Item item : inventory) {
                 System.out.println("  " + item.getLongName() + (item == adventure.getEquipped() ? ", equipped and ready for combat" : ""));
             }

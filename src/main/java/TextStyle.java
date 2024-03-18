@@ -23,16 +23,10 @@ public class TextStyle {
         s = s.replace('[', 'Å');
         s = s.replace(']', 'Ø');
 
-        // {tekst} bliver udskiftet med tekst med ramme om sig.
-        s = s.replace('{', 'å');
-        s = s.replace('}', 'ø');
-
         // Konvertering. Teknisk: Pas på med regex. Jeg har valgt danske bogstaver, så der ikke kan gå noget galt.
         s = s.replaceAll("Ø", RESET);
-        s = s.replaceAll("ø", " " + RESET);
         s = s.replaceAll("Æ", YELLOW_FG);
         s = s.replaceAll("Å", GREEN_FG);
-        s = s.replaceAll("å", FRAMED + " ");
 
         return s;
     }
