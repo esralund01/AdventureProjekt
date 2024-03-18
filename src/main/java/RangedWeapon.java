@@ -9,7 +9,7 @@ public class RangedWeapon extends Weapon {
         this.numberOfProjectiles = numberOfProjectiles;
     }
 
-    // Weapon method
+    // Weapon methods
     @Override
     public boolean canUse() {
         return numberOfProjectiles > 0;
@@ -18,5 +18,18 @@ public class RangedWeapon extends Weapon {
     @Override
     public void attack(){
         numberOfProjectiles -= 1;
+    }
+
+    // Item method
+    @Override
+    public String getLongName() {
+        String newLongName = super.getLongName();
+        if (numberOfProjectiles == 1) {
+            newLongName = newLongName.replace("(s)", "");
+        } else {
+            newLongName = newLongName.replace("(s)", "s");
+        }
+        newLongName = newLongName.replace("$", String.valueOf(numberOfProjectiles));
+        return newLongName;
     }
 }
