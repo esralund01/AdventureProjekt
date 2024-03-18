@@ -10,4 +10,6 @@ public class MeleeWeapon extends Weapon {
     public boolean canUse() {
         return true;
     }
+    @Override
+    public void attack(){}
 }

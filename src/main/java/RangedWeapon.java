@@ -14,4 +14,9 @@ public class RangedWeapon extends Weapon {
     public boolean canUse() {
         return numberOfProjectiles > 0;
     }
+
+    @Override
+    public void attack(){
+        numberOfProjectiles -= 1;
+    }
 }

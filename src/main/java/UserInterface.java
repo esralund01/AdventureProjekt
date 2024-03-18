@@ -35,6 +35,7 @@ public class UserInterface {
                 case "xyzzy" -> xyzzy();
                 case "inventory", "invent", "inv" -> inventory();
                 case "health" -> health();
+                case "attack" -> attack();
                 // Kommandoer med variable: Pattern matching kræver Java 21.
                 case String s when s.startsWith("go ") -> go(s.substring(3));
                 case String s when s.startsWith("take ") -> take(s.substring(5));
@@ -218,5 +219,16 @@ public class UserInterface {
             }
         }
         System.out.println(".");
+    }
+
+    private void attack (){
+        if (adventure.getEquipped() == null){
+            System.out.println("No weapon is equipped, you cannot attack");
+        } else if (adventure.getEquipped().canUse()) {
+            adventure.getEquipped().attack();
+            System.out.println("Attack!!");
+        } else {
+            System.out.println("No projectiles left in this weapon...");
+        }
     }
 }

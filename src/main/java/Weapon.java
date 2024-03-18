@@ -7,4 +7,6 @@ public abstract class Weapon extends Item {
 
     // Abstract method
     public abstract boolean canUse(); // Abstract metoder har ingen {krop}.
+
+    public abstract void attack();
 }
