@@ -23,7 +23,7 @@ public class UserInterface {
         look();
         adventure.getCurrentRoom().visit();
         while (gameIsRunning) {
-            System.out.printf("\n%sEnter command:%s ", TextStyle.LIGHT_BLACK_FG, TextStyle.RESET);
+            System.out.printf("\n%sEnter command:%s ", TextStyle.BRIGHT_BLACK_FG, TextStyle.RESET);
             String command = scanner.next().toLowerCase();
             System.out.println();
             switch (command) {
@@ -222,7 +222,7 @@ public class UserInterface {
         } else if (adventure.drink(foundInInventory)) {
             adventure.removeFromInventory(foundInInventory);
         } else {
-            System.out.printf("A%s isn't edible.\n", nOrNot(itemWord));
+            System.out.printf("A%s isn't drinkable.\n", nOrNot(itemWord));
             return; // Kan bruges til at stoppe her og ikke gå videre i metodens krop.
         }
         System.out.printf("Drinking the %s...\n", itemWord);

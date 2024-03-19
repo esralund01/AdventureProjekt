@@ -12,10 +12,10 @@ public class Item {
             shortName = longName.substring(longName.indexOf('<') + 1, longName.indexOf('>'));
         }
         catch (StringIndexOutOfBoundsException ignored) {
-            System.out.printf("\n%s Fejl %s\n%s-objekt ved navn '%s' har ikke fået sit <shortName> angivet korrekt.\n", TextStyle.FRAMED, TextStyle.RESET, this.getClass().toString().substring(6), longName);
+            System.out.printf("\n%sFejl:%s %s-objekt ved navn '%s' har ikke fået sit <shortName> angivet korrekt.\n", TextStyle.BRIGHT_RED_FG, TextStyle.RESET, this.getClass().toString().substring(6), longName);
         }
         this.shortName = shortName;
-        this.longName = TextStyle.color(longName); // Ændrer <tekst> til farvet tekst, se TextStyle-klassen.
+        this.longName = TextStyle.color(longName); // Ændrer <tekst> i longName til farvet tekst, se TextStyle-klassen.
     }
 
     // Getters

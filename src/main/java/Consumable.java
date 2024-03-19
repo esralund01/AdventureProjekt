@@ -1,9 +1,10 @@
-public abstract class Consumeables extends Item{
+public abstract class Consumable extends Item {
 
     // Attribute
     private final int healthPoints;
 
-    public Consumeables(String longName, int healthPoints) {
+    // Constructor
+    public Consumable(String longName, int healthPoints) {
         super(longName);
         this.healthPoints = healthPoints;
     }
@@ -12,5 +13,4 @@ public abstract class Consumeables extends Item{
     public int getHealthPoints() {
         return healthPoints;
     }
-
 }

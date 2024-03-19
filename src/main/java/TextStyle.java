@@ -7,7 +7,8 @@ public class TextStyle {
     public static final String RESET_FRAMED = "\u001B[54m";
     public static final String YELLOW_FG = "\u001B[33m";
     public static final String GREEN_FG = "\u001B[32m";
-    public static final String LIGHT_BLACK_FG = "\u001B[90m";
+    public static final String BRIGHT_RED_FG = "\u001B[91m";
+    public static final String BRIGHT_BLACK_FG = "\u001B[90m";
     public static final String FRAMED = "\u001B[51m";
     public static final String INVERT = "\u001B[7m";
     public static final String BOLD = "\u001B[1m";
