@@ -11,5 +11,5 @@ public class MeleeWeapon extends Weapon {
         return true;
     }
     @Override
-    public void attack(){}
+    public void use(){}
 }

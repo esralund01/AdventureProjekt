@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Adventure {
 
     // Attribute
-    private final Player player;
+    public final Player player;
 
     // Constructor
     public Adventure() {
@@ -61,5 +61,8 @@ public class Adventure {
 
     public Weapon getEquipped() {
         return player.getEquipped();
+    }
+    public void attack(Character c1, Character c2){
+        c1.attack(c2);
     }
 }

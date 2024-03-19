@@ -255,8 +255,17 @@ public class UserInterface {
         if (adventure.getEquipped() == null){
             System.out.println("No weapon is equipped, you cannot attack");
         } else if (adventure.getEquipped().canUse()) {
-            adventure.getEquipped().attack();
+            adventure.getEquipped().use();
+            Enemy enemy = adventure.getCurrentRoom().getEnemies().getFirst();
+            System.out.println("enemy  health" + enemy.getHealth());
+            adventure.attack(adventure.player, enemy);
             System.out.println("Attack!!");
+            System.out.println("enemy health " + enemy.getHealth());
+
+            System.out.println("player health: " + adventure.getHealth());
+            adventure.attack(enemy, adventure.player);
+            System.out.println(enemy.getName() + " attacks back");
+            System.out.println("player health: " + adventure.getHealth());
         } else {
             System.out.println("No projectiles left in this weapon...");
         }

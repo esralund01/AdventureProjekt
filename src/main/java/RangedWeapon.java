@@ -16,7 +16,7 @@ public class RangedWeapon extends Weapon {
     }
 
     @Override
-    public void attack(){
+    public void use(){
         numberOfProjectiles -= 1;
     }
 

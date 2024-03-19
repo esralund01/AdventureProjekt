@@ -40,6 +40,9 @@ public class Map {
         room3.addToRoom(new Liquid("a cup of freshly brewed <coffee>", 25));
         room1.addToRoom(new RangedWeapon("a black <revolver> with $ bullet(s)", 6));
         room2.addToRoom(new RangedWeapon("a <bow> and quiver with $ arrow(s)", 12));
+
+        Weapon wand = new MeleeWeapon("Voldemorts wand");
+        room4.addEnemy(new Enemy("Voldemort", "HE is really mad", 20, wand));
     }
 
     // Getter

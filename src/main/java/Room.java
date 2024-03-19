@@ -92,6 +92,9 @@ public class Room {
         for (Item item : items) {
             s += ", and " + item.getLongName();
         }
+        for (Enemy enemy : enemies) {
+            s += ", and an e" + enemy.getName();
+        }
         return s;
     }
 

@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Player {
+public class Player extends Character{
 
     // Attributes
     private final ArrayList<Item> inventory;
@@ -8,8 +8,6 @@ public class Player {
     private Room previousRoom;
     private Room portalRoom;
     private final int maxHealth;
-    private int health;
-    private Weapon equipped;
 
     // Constructor
     public Player(Room firstRoom) {
@@ -31,14 +29,6 @@ public class Player {
 
     public int getMaxHealth() {
         return maxHealth;
-    }
-
-    public int getHealth() {
-        return health;
-    }
-
-    public Weapon getEquipped() {
-        return equipped;
     }
 
     // Methods
