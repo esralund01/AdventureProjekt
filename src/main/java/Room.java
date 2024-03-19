@@ -13,6 +13,7 @@ public class Room {
     private final boolean hasLights;
     private boolean isDark;
     private final ArrayList<Item> items;
+    private final ArrayList<Enemy> enemies;
 
     // Constructor 1: Rum uden lys/mørke-funktion.
     public Room(String name, String description) {
@@ -22,6 +23,7 @@ public class Room {
         isDark = false;
         isAlreadyVisited = false;
         items = new ArrayList<>();
+        enemies = new ArrayList<>();
     }
 
     // Constructor 2: Rum med lys/mørke-funktion. Her vælger man om rummet er mørkt eller ej fra starten.
@@ -32,7 +34,17 @@ public class Room {
         this.isDark = isDark;
         isAlreadyVisited = false;
         items = new ArrayList<>();
+        enemies = new ArrayList<>();
     }
+
+    public ArrayList<Enemy> getEnemies() {
+        return enemies;
+    }
+
+    public void addEnemy(Enemy enemy) {
+        enemies.add(enemy);
+    }
+
 
     // Setters
     public void setNorth(Room north) {
