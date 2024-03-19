@@ -13,7 +13,7 @@ public class TextStyle {
     public static final String BOLD = "\u001B[1m";
 
     // Metoden tager en string ind og returnerer en string magen til men i farver.
-    public static String format(String s) {
+    public static String color(String s) {
 
         // <tekst> bliver udskiftet med gul tekst.
         s = s.replace('<', 'Æ');
@@ -29,5 +29,25 @@ public class TextStyle {
         s = s.replaceAll("Å", GREEN_FG);
 
         return s;
+    }
+
+    public static String number(int i) {
+        return switch (i) {
+            case 0 -> "no more";
+            case 1 -> "a single";
+            case 2 -> "a couple of";
+            case 3 -> "three";
+            case 4 -> "four";
+            case 5 -> "five";
+            case 6 -> "half a dozen";
+            case 7 -> "seven";
+            case 8 -> "eight";
+            case 9 -> "nine";
+            case 10 -> "ten";
+            case 11 -> "eleven";
+            case 12 -> "a dozen";
+            // Fortsæt evt. med "score" (20), "two dozen" (24), "two score" (40) osv.
+            default -> String.valueOf(i);
+        };
     }
 }

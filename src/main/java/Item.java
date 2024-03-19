@@ -15,7 +15,7 @@ public class Item {
             System.out.printf("\n%s Fejl %s\n%s-objekt ved navn '%s' har ikke fået sit <shortName> angivet korrekt.\n", TextStyle.FRAMED, TextStyle.RESET, this.getClass().toString().substring(6), longName);
         }
         this.shortName = shortName;
-        this.longName = TextStyle.format(longName); // Ændrer <tekst> til farvet tekst, se TextStyle-klassen.
+        this.longName = TextStyle.color(longName); // Ændrer <tekst> til farvet tekst, se TextStyle-klassen.
     }
 
     // Getters

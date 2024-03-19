@@ -79,7 +79,7 @@ public class UserInterface {
         commands.add("[equip] <_> lets you equip the selected weapon for combat.");
         commands.add("[turn] <_> [light] turns the light <on> or <off> if possible.");
         for (String command : commands) {
-            command = TextStyle.format(command);
+            command = TextStyle.color(command);
             System.out.println("  " + command);
         }
         System.out.println("Commands are shown in green and selectables are shown in yellow.");
@@ -232,7 +232,7 @@ public class UserInterface {
         } else if (healthPoints < 0) {
             System.out.printf("That wasn't good for you. Your health has decreased by %d", healthPoints * -1);
         } else {
-            System.out.print("Your health is unchanged, but your stomach is fuller");
+            System.out.print("Your health is unchanged, but your thirst is quenched");
         }
         System.out.println(".");
     }

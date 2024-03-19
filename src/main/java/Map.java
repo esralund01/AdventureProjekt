@@ -38,8 +38,8 @@ public class Map {
         room1.addToRoom(new Food("a red <apple>", 10));
         room2.addToRoom(new Food("a <black apple>", -20));
         room3.addToRoom(new Liquid("a cup of freshly brewed <coffee>", 25));
-        room1.addToRoom(new RangedWeapon("a black <pistol> and $ bullet(s)", 6));
-        room2.addToRoom(new RangedWeapon("a <bow> and $ arrow(s)", 12));
+        room1.addToRoom(new RangedWeapon("a black <revolver> with $ bullet(s)", 6));
+        room2.addToRoom(new RangedWeapon("a <bow> and quiver with $ arrow(s)", 12));
     }
 
     // Getter

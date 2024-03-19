@@ -29,7 +29,7 @@ public class RangedWeapon extends Weapon {
         } else {
             newLongName = newLongName.replace("(s)", "s");
         }
-        newLongName = newLongName.replace("$", String.valueOf(numberOfProjectiles));
+        newLongName = newLongName.replace("$", TextStyle.number(numberOfProjectiles));
         return newLongName;
     }
 }
