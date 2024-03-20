@@ -34,7 +34,7 @@ public class UserInterface {
                 case "xyzzy" -> xyzzy();
                 case "inventory", "invent", "inv" -> inventory();
                 case "health" -> health();
-                case "attack" -> attack();
+                case "attack", "a" -> attack("");
                 // Kommandoer med variable: Pattern matching kræver Java 21.
                 case String s when s.startsWith("go ") -> go(s.substring(3));
                 case String s when s.startsWith("take ") -> take(s.substring(5));
@@ -42,6 +42,7 @@ public class UserInterface {
                 case String s when s.startsWith("eat ") -> consume(true, s.substring(4));
                 case String s when s.startsWith("drink ") -> consume(false, s.substring(6));
                 case String s when s.startsWith("equip ") -> equip(s.substring(6));
+                case String s when s.startsWith("attack ") -> attack(s.substring(7));
                 case String s when s.contains("help") -> help(); // Så er vi i hvert fald helt sikre på, at man kan få hjælp.
                 default -> System.out.printf("Could not recognize '%s'. Enter %shelp%s to view available commands.\n", command, TextStyle.GREEN_FG, TextStyle.RESET);
             }
@@ -54,7 +55,7 @@ public class UserInterface {
         // fx "a horse" eller "an apple", men ikke ved om det er "horse" eller "apple",
         // og derfor ikke ved, som det skal være "a" eller "an".
         // Metoden tager variablen som parameter og returnerer "n " + variabel foran a, e, i og o, "(n) " + variabel foran u og ellers " " + variabel.
-        // Man kan derfor skrive A + nOrNot(variabel) eller a + nOrNot(variabel), så kommer der måske et n samt et mellemrum.
+        // Man kan derfor skrive "A" + nOrNot(variabel) eller "a" + nOrNot(variabel), så kommer der måske et n samt et mellemrum mellem a/A o variblen.
         return (s.startsWith("a") || s.startsWith("e") || s.startsWith("i") || s.startsWith("o") ? "n " : s.startsWith("u") ? "(n) " : " ") + s;
     }
 
@@ -87,7 +88,7 @@ public class UserInterface {
 
     private void exit() {
         gameIsRunning = false;
-        System.out.println("Quitting game...");
+        System.out.println("Game over.");
     }
 
     private void help() {
@@ -103,6 +104,8 @@ public class UserInterface {
         commands.add("[eat] <_> lets you eat the selected food to restore health.");
         commands.add("[drink] <_> lets you drink the selected liquid to restore health.");
         commands.add("[equip] <_> lets you equip the selected weapon for combat.");
+        commands.add("[attack] <_> lets you attack the selected enemy.");
+        commands.add("[attack] lets you attack a previously selected enemy if any.");
         commands.add("[turn] <_> [light] turns the light <on> or <off> if possible.");
         for (String command : commands) {
             command = TextStyle.color(command);
@@ -119,7 +122,7 @@ public class UserInterface {
         boolean wasDark = adventure.getCurrentRoom().getIsDark();
         if (adventure.getCurrentRoom().turnLight(on)) {
             if (wasDark == on) {
-                System.out.printf("Turning %s the light...\n", on ? "on" : "off"); // Ternary operator.
+                System.out.printf("You're turning %s the light...\n", on ? "on" : "off"); // Ternary operator.
                 look();
             } else {
                 System.out.printf("The light was already %s.\n", on ? "on" : "off"); // Ternary operator.
@@ -130,8 +133,8 @@ public class UserInterface {
     }
 
     private void xyzzy() {
+        System.out.printf("A magic portal opens in %s and you're going through it...\n", adventure.getCurrentRoom().getName());
         adventure.teleport();
-        System.out.println("A magic portal opens and you go through it...");
         System.out.printf("You are in %s again.\n", adventure.getCurrentRoom().getName());
     }
 
@@ -170,12 +173,13 @@ public class UserInterface {
             case "s" -> "south";
             default -> directionWord;
         };
+        String oldRoomName = adventure.getCurrentRoom().getName();
         switch (adventure.go(dw)) {
             case NOT_FOUND -> System.out.printf("Could not recognize '%s' as a cardinal direction.\n", dw);
             case NO_ACCESS -> System.out.printf("You're in a %s.\n", adventure.getCurrentRoom().getDescription());
             case NULL -> System.out.printf("You can't go %s.\n", dw);
             case SUCCESS -> {
-                System.out.printf("Going %s...\n", dw);
+                System.out.printf("You're leaving %s and going %s...\n", oldRoomName, dw);
                 if (adventure.getCurrentRoom().getIsAlreadyVisited()) {
                     System.out.printf("You are in %s again.\n", adventure.getCurrentRoom().getName());
                 } else {
@@ -188,8 +192,8 @@ public class UserInterface {
     private void take(String itemWord) {
         switch (adventure.take(itemWord)) {
             case NOT_FOUND -> System.out.printf("Could not find '%s' in %s", itemWord, adventure.getCurrentRoom().getName());
-            case NO_ACCESS -> System.out.printf("Oh, that %s? Good luck trying to take that", itemWord);
-            case SUCCESS -> System.out.printf("The %s has been moved to your inventory", itemWord);
+            case NO_ACCESS -> System.out.printf("Oh, that %s? Good luck trying to steal that", itemWord);
+            case SUCCESS -> System.out.printf("You're taking the %s...\nThe %s has been moved to your inventory", itemWord, itemWord);
         }
         System.out.println(".");
     }
@@ -197,7 +201,7 @@ public class UserInterface {
     private void drop(String itemWord) {
         switch (adventure.drop(itemWord)) {
             case NOT_FOUND -> System.out.printf("Could not find '%s' in your inventory", itemWord);
-            case SUCCESS -> System.out.printf("The %s has been removed from your inventory and dropped in %s", itemWord, adventure.getCurrentRoom().getName());
+            case SUCCESS -> System.out.printf("You're dropping the %s in %s...\nThe %s has been removed from your inventory and dropped in %s", itemWord, adventure.getCurrentRoom().getName(), itemWord, adventure.getCurrentRoom().getName());
         }
         System.out.println(".");
     }
@@ -208,44 +212,49 @@ public class UserInterface {
             case NOT_FOUND -> System.out.printf("Could not find '%s' in %s or your inventory.\n", itemWord, adventure.getCurrentRoom().getName());
             case WRONG_TYPE -> System.out.printf("A%s isn't %s.\n", nOrNot(itemWord), food ? "edible" : "drinkable");
             case SUCCESS -> {
-                System.out.printf("%s the %s...\n", food ? "Eating" : "Drinking", itemWord);
+                System.out.printf("You're %s the %s...\n", food ? "eating" : "drinking", itemWord);
                 int healthDifference = adventure.getHealth() - oldHealth;
                 if (healthDifference > 0) {
-                    System.out.printf("You gained %d hit points", healthDifference);
+                    System.out.printf("You gained %d hit points.\n", healthDifference);
                 } else if (healthDifference < 0) {
-                    System.out.printf("That wasn't good for you. You lost %d hit points", healthDifference * -1);
+                    System.out.printf("That wasn't good for you. You lost %d hit points.\n", healthDifference * -1);
                     deathCheck();
                 } else {
-                    System.out.printf("Your health is unchanged, but your %s", food ? "stomach is fuller" : "thirst is quenched");
+                    System.out.printf("Your health is unchanged, but your %s.\n", food ? "stomach is fuller" : "thirst is quenched");
                 }
             }
         }
-        System.out.println(".");
     }
 
     private void equip(String itemWord) {
         switch (adventure.equip(itemWord)) {
             case NOT_FOUND -> System.out.printf("Could not find '%s' in your inventory", itemWord);
             case WRONG_TYPE -> System.out.printf("A%s is not a weapon", nOrNot(itemWord));
-            case SUCCESS -> System.out.printf("Your %s is equipped and ready for combat", itemWord);
+            case SUCCESS -> System.out.printf("You're equipping yourself with the %s...\nYour %s is now ready for combat", itemWord, itemWord);
         }
         System.out.println(".");
     }
 
-    private void attack() {
-        Enemy opponent = adventure.getCurrentRoom().findEnemy();
+    private void attack(String name) {
+        Enemy opponent = adventure.getCurrentRoom().selectEnemy(name);
         int opponentOldHealth = -1;
         if (opponent != null) {
             opponentOldHealth = opponent.getHealth();
         }
         int playerOldHealth = adventure.getHealth();
-        switch (adventure.attack(opponent)) {
+        switch (adventure.attack()) {
             case NULL -> System.out.println("You don't have a weapon ready.");
-            case NO_ACCESS -> System.out.printf("There are no projectiles left in your %s.\n", adventure.getEquipped().getShortName());
-            case NOT_FOUND -> System.out.println("Attacking...\nYou used your weapon in vain.");
+            case NO_ACCESS -> System.out.printf("Your %s has no more ammunition.\n", adventure.getEquipped().getShortName());
+            case NOT_FOUND -> {
+                if (name.isEmpty()) {
+                    System.out.printf("You're attacking...\nYou used your weapon in vain, because you haven't selected an enemy in %s.\n", adventure.getCurrentRoom().getName());
+                } else {
+                    System.out.printf("You're attacking '%s'...\nYou used your weapon in vain, because '%s' could not be found in %s.\n", name, name, adventure.getCurrentRoom().getName());
+                }
+            }
             case SUCCESS -> {
                 assert opponent != null;
-                System.out.printf("Attacking %s...\n", theIfNotName(opponent.getShortName()));
+                System.out.printf("You're attacking %s...\n", theIfNotName(opponent.getShortName()));
                 int opponentHealthDifference =  opponentOldHealth - opponent.getHealth();
                 System.out.printf("You wield your %s against %s, who then loses %d hit points.\n", adventure.getEquipped().getShortName().toLowerCase(), theIfNotName(opponent.getShortName()), opponentHealthDifference);
                 if (opponent.getHealth() == 0) {

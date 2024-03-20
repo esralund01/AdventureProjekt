@@ -27,6 +27,7 @@ public class Player extends Character {
 
     // Methods
     public void teleport() {
+        currentRoom.leave();
         Room teleportedFrom = currentRoom;
         currentRoom = portalRoom;
         portalRoom = teleportedFrom;
@@ -53,6 +54,7 @@ public class Player extends Character {
         if (desiredRoom == null) {
             return State.NULL; // Der var ikke noget rum forbundet i den retning.
         }
+        currentRoom.leave();
         previousRoom = currentRoom;
         currentRoom = desiredRoom;
         return State.SUCCESS;
@@ -115,7 +117,8 @@ public class Player extends Character {
         return State.WRONG_TYPE;
     }
 
-    public State attack(Enemy opponent) {
+    public State attack() {
+        Enemy opponent = currentRoom.getSelected();
         if (getEquipped() == null) { // Er der et våben equipped?
             return State.NULL;
         }

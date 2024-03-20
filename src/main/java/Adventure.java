@@ -55,7 +55,7 @@ public class Adventure {
         return player.getEquipped();
     }
 
-    public State attack(Enemy opponent) {
-        return player.attack(opponent);
+    public State attack() {
+        return player.attack();
     }
 }
