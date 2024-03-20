@@ -81,6 +81,7 @@ public class Room {
     }
 
     public String getName() {
+        isAlreadyVisited = true; // Når man beder om navnet på et rum, så er det jo fordi man besøger det.
         return name;
     }
 
@@ -107,10 +108,6 @@ public class Room {
     }
 
     // Methods
-    public void visit() {
-        isAlreadyVisited = true;
-    }
-
     public boolean turnLight(boolean on) { // skal converteres til state
         if (hasLights) {
             isDark = !on;

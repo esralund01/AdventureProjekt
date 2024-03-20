@@ -23,8 +23,8 @@ public class Adventure {
         return player.getCurrentRoom();
     }
 
-    public State go(String direction) {
-        return player.go(direction);
+    public State go(String directionWord) {
+        return player.go(directionWord);
     }
 
     public int getMaxHealth() {
@@ -40,7 +40,7 @@ public class Adventure {
     }
 
     public State drop(String itemWord) {
-        return player.take(itemWord);
+        return player.drop(itemWord);
     }
 
     public State consume(boolean food, String itemWord) {

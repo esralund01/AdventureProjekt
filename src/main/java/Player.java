@@ -38,34 +38,26 @@ public class Player extends Character {
         portalRoom = teleportedFrom;
     }
 
-    public State go(String direction) {
-        // go er en kopi af move fra Signes PowerPoint på Fronter men med "Darkness, imprison me!" tilføjet.
+    public State go(String directionWord) {
         Room desiredRoom;
-        switch (direction) {
+        switch (directionWord) {
             case "north" -> desiredRoom = currentRoom.getNorth();
             case "east" -> desiredRoom = currentRoom.getEast();
             case "west" -> desiredRoom = currentRoom.getWest();
             case "south" -> desiredRoom = currentRoom.getSouth();
             default -> {
-                return State.NOT_FOUND;
+                return State.NOT_FOUND; // Failure
             }
         }
-        if (!currentRoom.getIsDark() || desiredRoom == previousRoom) {
-            previousRoom = currentRoom;
-            currentRoom = desiredRoom;
-            return State.SUCCESS;
-        } else {
-            return State.FAILURE; // upræcis
+        if (currentRoom.getIsDark() && desiredRoom != previousRoom) {
+            return State.NO_LIGHT; // Failure
         }
-    }
-
-    private Item findInInventory(String itemWord) {
-        for (Item item : inventory) {
-            if (item.getShortName().equals(itemWord)) {
-                return item;
-            }
+        if (desiredRoom == null) {
+            return State.NO_DOOR; // Failure
         }
-        return null;
+        previousRoom = currentRoom;
+        currentRoom = desiredRoom;
+        return State.SUCCESS;
     }
 
     public State take(String itemWord) {
@@ -94,16 +86,22 @@ public class Player extends Character {
         if (foundInRoom == null && foundInInventory == null) {
             return State.NOT_FOUND;
         }
+        Consumable found;
         if ((food && foundInRoom instanceof Food) || (!food && foundInRoom instanceof Liquid)) {
             currentRoom.removeFromRoom(foundInRoom);
-            incrementHealth(((Food) foundInRoom).getHealthPoints());
-            return State.SUCCESS;
+            found = (Consumable) foundInRoom;
         } else if ((food && foundInInventory instanceof Food) || (!food && foundInInventory instanceof Liquid)) {
             inventory.remove(foundInInventory);
-            incrementHealth(((Food) foundInInventory).getHealthPoints());
-            return State.SUCCESS;
+            found = (Consumable) foundInInventory;
+
+        } else {
+            return State.WRONG_TYPE;
         }
-        return State.WRONG_TYPE;
+        health += found.getHealthPoints();
+        if (health > maxHealth) {
+            health = maxHealth;
+        }
+        return State.SUCCESS;
     }
 
     public State equip(String itemWord) {
@@ -116,14 +114,6 @@ public class Player extends Character {
             return State.SUCCESS;
         }
         return State.WRONG_TYPE;
-    }
-
-    // Auxiliary method
-    private void incrementHealth(int i) {
-        health += i;
-        if (health > maxHealth) {
-            health = maxHealth;
-        }
     }
 
     public State attack() {
@@ -144,5 +134,15 @@ public class Player extends Character {
         }
         enemy.attack(this);
         return State.SUCCESS;
+    }
+
+    // Auxiliary method
+    private Item findInInventory(String itemWord) {
+        for (Item item : inventory) {
+            if (item.getShortName().equals(itemWord)) {
+                return item;
+            }
+        }
+        return null;
     }
 }

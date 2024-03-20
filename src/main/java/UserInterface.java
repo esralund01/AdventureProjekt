@@ -21,7 +21,6 @@ public class UserInterface {
         gameIsRunning = true;
         System.out.printf("\n%s          Welcome to          \n%s          ADVENTURE           %s\n%s           the game           %s\n\n", TextStyle.YELLOW_FG + TextStyle.FRAMED, TextStyle.RESET_FRAMED + TextStyle.INVERT + TextStyle.BOLD, TextStyle.RESET_BOLD + TextStyle.RESET_INVERT, TextStyle.FRAMED, TextStyle.RESET);
         look();
-        adventure.getCurrentRoom().visit();
         while (gameIsRunning) {
             System.out.printf("\n%sEnter command:%s ", TextStyle.BRIGHT_BLACK_FG, TextStyle.RESET);
             String command = scanner.next().toLowerCase();
@@ -136,27 +135,25 @@ public class UserInterface {
         System.out.println(".");
     }
 
-    private void go(String input) { // mange flere enum muligheder
-        String direction = switch (input) {
+    private void go(String directionWord) {
+        String dw = switch (directionWord) {
             case "n" -> "north";
             case "e" -> "east";
             case "w" -> "west";
             case "s" -> "south";
-            default -> "";
+            default -> directionWord;
         };
-        if (direction.isEmpty()) { //FORKER
-            System.out.printf("Could not recognize '%s' as a cardinal direction.\n", input);
-        } else {
-            System.out.printf("Going %s...\n", direction);
-            if (adventure.go(direction) == State.SUCCESS) {
+        switch (adventure.go(dw)) {
+            case NOT_FOUND -> System.out.printf("Could not recognize '%s' as a cardinal direction.\n", dw);
+            case NO_LIGHT -> System.out.printf("You're in %s.\n", adventure.getCurrentRoom().getDescription());
+            case NO_DOOR -> System.out.printf("You can't go %s.\n", dw);
+            case SUCCESS -> {
+                System.out.printf("Going %s...\n", dw);
                 if (adventure.getCurrentRoom().getIsAlreadyVisited()) {
                     System.out.printf("You are in %s again.\n", adventure.getCurrentRoom().getName());
                 } else {
                     look();
-                    adventure.getCurrentRoom().visit();
                 }
-            } else {
-                System.out.println("You cannot go that way.");
             }
         }
     }
@@ -170,7 +167,7 @@ public class UserInterface {
     }
 
     private void drop(String itemWord) {
-        switch (adventure.take(itemWord)) {
+        switch (adventure.drop(itemWord)) {
             case NOT_FOUND -> System.out.printf("Could not find '%s' in your inventory", itemWord);
             case SUCCESS -> System.out.printf("The %s has been removed from your inventory and dropped in %s", itemWord, adventure.getCurrentRoom().getName());
         }
@@ -207,8 +204,8 @@ public class UserInterface {
     }
 
     private void attack (){
-        Enemy enemy = adventure.getCurrentRoom().getEnemies();
-        System.out.println("enemy  health before attack: " + enemy.getHealth());
+        //Enemy enemy = adventure.getCurrentRoom().getEnemies();
+        //System.out.println("enemy  health before attack: " + enemy.getHealth());
         System.out.println("player health before enemy strikes back: " + adventure.getHealth());
         switch (adventure.attack()){
            case State.FAILURE ->  System.out.println("No weapon is equipped, you cannot attack");
@@ -217,10 +214,10 @@ public class UserInterface {
 
               //  Enemy enemy = adventure.getCurrentRoom().getEnemies().getFirst();
                 System.out.println("Attack!!");
-                System.out.println("enemy health after attack: " + enemy.getHealth());
+                //System.out.println("enemy health after attack: " + enemy.getHealth());
 
 
-                System.out.println(enemy.getName() + " attacks back");
+                //System.out.println(enemy.getName() + " attacks back");
                 System.out.println("player health after enemy attack: " + adventure.getHealth());
             }
             case State.NO_AMMO ->  System.out.println("No projectiles left in this weapon...");
