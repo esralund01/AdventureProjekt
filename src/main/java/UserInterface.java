@@ -55,17 +55,17 @@ public class UserInterface {
         // fx "a horse" eller "an apple", men ikke ved om det er "horse" eller "apple",
         // og derfor ikke ved, som det skal være "a" eller "an".
         // Metoden tager variablen som parameter og returnerer "n " + variabel foran a, e, i og o, "(n) " + variabel foran u og ellers " " + variabel.
-        // Man kan derfor skrive "A" + nOrNot(variabel) eller "a" + nOrNot(variabel), så kommer der måske et n samt et mellemrum mellem a/A o variblen.
+        // Man kan derfor skrive "A" + nOrNot(variabel) eller "a" + nOrNot(variabel), så kommer der måske et n samt et mellemrum mellem a/A o variablen.
         return (s.startsWith("a") || s.startsWith("e") || s.startsWith("i") || s.startsWith("o") ? "n " : s.startsWith("u") ? "(n) " : " ") + s;
     }
 
     private String aToTheUpperCase(String str) {
         String s = str;
-        if (s.startsWith("a")) {
+        if (s.startsWith("a ")) {
             s = "The" + s.substring(1);
-        } else if (s.startsWith("an")) {
+        } else if (s.startsWith("an ")) {
             s = "The" + s.substring(2);
-        } else if (s.startsWith("the")) {
+        } else if (s.startsWith("the ")) {
             s = "T" + s.substring(1);
         }
         return s;
