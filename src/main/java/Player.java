@@ -8,6 +8,7 @@ public class Player extends Character {
     private Room previousRoom;
     private Room portalRoom;
     private final int maxHealth;
+    private Enemy opponent;
 
     // Constructor
     public Player(Room firstRoom) {
@@ -29,6 +30,10 @@ public class Player extends Character {
 
     public int getMaxHealth() {
         return maxHealth;
+    }
+
+    public Enemy getOpponent() {
+        return opponent;
     }
 
     // Methods
@@ -115,24 +120,32 @@ public class Player extends Character {
         }
         return State.WRONG_TYPE;
     }
-
+    public void chooseOpponent(){
+        if (getCurrentRoom().getEnemies().isEmpty()) {
+            opponent = null;
+        }
+       else {
+            opponent = currentRoom.getEnemies().getFirst();
+        }
+    }
     public State attack() {
         if (getEquipped() == null) {
-            return State.FAILURE;
+            return State.FAILURE; // no weapon
         }
         if (!getEquipped().canUse()) {
-            return State.FAILURE;
+            return State.NO_AMMO;
         }
-        if (getCurrentRoom().getEnemies().isEmpty()) {
-            return State.FAILURE;
+        if (opponent == null) {
+            return State.NOT_FOUND;
         }
-        Enemy enemy = getCurrentRoom().getEnemies().getFirst();
-        enemy.hit(equipped.getHitPoints());
-        if (enemy.getHealth()<=0){
-            getCurrentRoom().getEnemies().remove(enemy);
-            return State.DEATH;
+        opponent.hit(equipped.getHitPoints());
+        if (opponent.getHealth()<=0){
+            currentRoom.getEnemies().remove(opponent);
+            currentRoom.addToRoom(opponent.getEquipped());
+            opponent = null;
+            return State.SUCCESS;
         }
-        enemy.attack(this);
+        opponent.attack(this);
         return State.SUCCESS;
     }
 

@@ -4,13 +4,6 @@ public abstract class Character {
     protected Weapon equipped;
 
 
-
-   /* public void attack (Character character) {
-        character.hit();
-    }
-
-    */
-
     public void hit(int hitPoints) {
         health -= hitPoints;
     }

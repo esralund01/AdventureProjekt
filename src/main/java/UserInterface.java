@@ -204,24 +204,33 @@ public class UserInterface {
     }
 
     private void attack (){
-        //Enemy enemy = adventure.getCurrentRoom().getEnemies();
-        //System.out.println("enemy  health before attack: " + enemy.getHealth());
-        System.out.println("player health before enemy strikes back: " + adventure.getHealth());
+        adventure.chooseOpponent();
+        int enemyOldHealth = 0;
+        if (adventure.getOpponent() != null) {
+            enemyOldHealth = adventure.getOpponent().getHealth();
+        }
+        int playerOldHealth = adventure.getHealth();
         switch (adventure.attack()){
-           case State.FAILURE ->  System.out.println("No weapon is equipped, you cannot attack");
-            case State.SUCCESS -> {
+           case FAILURE ->  System.out.println("No weapon is equipped, you cannot attack");
+            case NOT_FOUND -> System.out.println("enemy not found.");
+            case SUCCESS -> {
+                System.out.println("enemy  health before attack: " + enemyOldHealth);
+                System.out.println("player health before enemy strikes back: " + playerOldHealth);
                 adventure.getEquipped().use();
 
-              //  Enemy enemy = adventure.getCurrentRoom().getEnemies().getFirst();
                 System.out.println("Attack!!");
-                //System.out.println("enemy health after attack: " + enemy.getHealth());
 
-
-                //System.out.println(enemy.getName() + " attacks back");
-                System.out.println("player health after enemy attack: " + adventure.getHealth());
+                if (adventure.getOpponent() == null) {
+                    System.out.println("You killed the enemy. Their body is gone, but their weapon is still in the room. ");
+                    System.out.println(adventure.getCurrentRoom().getLastItem().getLongName());
+                }
+                else {
+                    System.out.println("enemy health after attack: " + adventure.getOpponent().getHealth());
+                    //System.out.println(enemy.getName() + " attacks back");
+                    System.out.println("player health after enemy attack: " + adventure.getHealth());
+                }
             }
-            case State.NO_AMMO ->  System.out.println("No projectiles left in this weapon...");
-            case State.DEATH -> System.out.println("You killed the enemy. Their body is gone, but their weapon is still in the room");
+            case NO_AMMO ->  System.out.println("No projectiles left in this weapon...");
         }
     }
 }

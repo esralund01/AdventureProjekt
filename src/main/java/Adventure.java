@@ -22,6 +22,9 @@ public class Adventure {
     public Room getCurrentRoom() {
         return player.getCurrentRoom();
     }
+    public Enemy getOpponent(){
+        return player.getOpponent();
+    }
 
     public State go(String directionWord) {
         return player.go(directionWord);
@@ -57,5 +60,9 @@ public class Adventure {
 
     public State attack(){
         return player.attack();
+    }
+
+    public void chooseOpponent(){
+        player.chooseOpponent();
     }
 }

@@ -133,4 +133,8 @@ public class Room {
     public void removeFromRoom(Item item) {
         items.remove(item);
     }
+
+    public Item getLastItem(){
+        return items.getLast();
+    }
 }
