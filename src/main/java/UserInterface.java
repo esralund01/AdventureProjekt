@@ -40,8 +40,8 @@ public class UserInterface {
                 case String s when s.startsWith("go ") -> go(s.substring(3));
                 case String s when s.startsWith("take ") -> take(s.substring(5));
                 case String s when s.startsWith("drop ") -> drop(s.substring(5));
-                case String s when s.startsWith("eat ") -> eat(s.substring(4));
-                case String s when s.startsWith("drink ") -> drink(s.substring(6));
+                case String s when s.startsWith("eat ") -> consume(true, s.substring(4));
+                case String s when s.startsWith("drink ") -> consume(false, s.substring(6));
                 case String s when s.startsWith("equip ") -> equip(s.substring(6));
                 case String s when s.contains("help") -> help(); // Så er vi i hvert fald helt sikre på, at man kan få hjælp.
                 default -> System.out.printf("Could not recognize '%s'. Enter %shelp%s to view available commands.\n", command, TextStyle.GREEN_FG, TextStyle.RESET);
@@ -136,117 +136,72 @@ public class UserInterface {
         System.out.println(".");
     }
 
-    private void go(String input) {
+    private void go(String input) { // mange flere enum muligheder
         String direction = switch (input) {
             case "n" -> "north";
             case "e" -> "east";
             case "w" -> "west";
             case "s" -> "south";
-            default -> input;
+            default -> "";
         };
-        if (adventure.go(direction)) {
-            System.out.printf("Going %s...\n", direction);
-            if (adventure.getCurrentRoom().getIsAlreadyVisited()) {
-                System.out.printf("You are in %s again.\n", adventure.getCurrentRoom().getName());
-            } else {
-                look();
-                adventure.getCurrentRoom().visit();
-            }
+        if (direction.isEmpty()) { //FORKER
+            System.out.printf("Could not recognize '%s' as a cardinal direction.\n", input);
         } else {
-            System.out.println("You cannot go that way.");
+            System.out.printf("Going %s...\n", direction);
+            if (adventure.go(direction) == State.SUCCESS) {
+                if (adventure.getCurrentRoom().getIsAlreadyVisited()) {
+                    System.out.printf("You are in %s again.\n", adventure.getCurrentRoom().getName());
+                } else {
+                    look();
+                    adventure.getCurrentRoom().visit();
+                }
+            } else {
+                System.out.println("You cannot go that way.");
+            }
         }
     }
 
     private void take(String itemWord) {
-        Item found = adventure.getCurrentRoom().findInRoom(itemWord);
-        if (found != null) {
-            adventure.getCurrentRoom().removeFromRoom(found);
-            adventure.addToInventory(found);
-            System.out.printf("The %s has been moved to your inventory", itemWord);
-        } else {
-            System.out.printf("Could not find '%s' in %s", itemWord, adventure.getCurrentRoom().getName());
+        switch (adventure.take(itemWord)) {
+            case NOT_FOUND -> System.out.printf("Could not find '%s' in %s", itemWord, adventure.getCurrentRoom().getName());
+            case SUCCESS -> System.out.printf("The %s has been moved to your inventory", itemWord);
         }
         System.out.println(".");
     }
 
     private void drop(String itemWord) {
-        Item found = adventure.findInInventory(itemWord);
-        if (found != null) {
-            adventure.removeFromInventory(found);
-            adventure.getCurrentRoom().addToRoom(found);
-            System.out.printf("The %s has been removed from your inventory and dropped in %s", itemWord, adventure.getCurrentRoom().getName());
-        } else {
-            System.out.printf("Could not find '%s' in your inventory", itemWord);
+        switch (adventure.take(itemWord)) {
+            case NOT_FOUND -> System.out.printf("Could not find '%s' in your inventory", itemWord);
+            case SUCCESS -> System.out.printf("The %s has been removed from your inventory and dropped in %s", itemWord, adventure.getCurrentRoom().getName());
         }
         System.out.println(".");
     }
 
-    private void eat(String itemWord) {
-        Item foundInRoom = adventure.getCurrentRoom().findInRoom(itemWord);
-        Item foundInInventory = adventure.findInInventory(itemWord);
-        if (foundInRoom == null && foundInInventory == null) {
-            System.out.printf("Could not find '%s' in %s or your inventory.\n", itemWord, adventure.getCurrentRoom().getName());
-            return; // Kan bruges til at stoppe her og ikke gå videre i metodens krop.
-        }
+    private void consume(boolean food, String itemWord) {
         int oldHealth = adventure.getHealth();
-        if (adventure.eat(foundInRoom)) {
-            adventure.getCurrentRoom().removeFromRoom(foundInRoom);
-        } else if (adventure.eat(foundInInventory)) {
-            adventure.removeFromInventory(foundInInventory);
-        } else {
-            System.out.printf("A%s isn't edible.\n", nOrNot(itemWord));
-            return; // Kan bruges til at stoppe her og ikke gå videre i metodens krop.
-        }
-        System.out.printf("Eating the %s...\n", itemWord);
-        int healthPoints = adventure.getHealth() - oldHealth;
-        if (healthPoints > 0) {
-            System.out.printf("Your health has increased by %d", healthPoints);
-        } else if (healthPoints < 0) {
-            System.out.printf("That wasn't good for you. Your health has decreased by %d", healthPoints * -1);
-        } else {
-            System.out.print("Your health is unchanged, but your stomach is fuller");
-        }
-        System.out.println(".");
-    }
-
-    private void drink(String itemWord) {
-        Item foundInRoom = adventure.getCurrentRoom().findInRoom(itemWord);
-        Item foundInInventory = adventure.findInInventory(itemWord);
-        if (foundInRoom == null && foundInInventory == null) {
-            System.out.printf("Could not find '%s' in %s or your inventory.\n", itemWord, adventure.getCurrentRoom().getName());
-            return; // Kan bruges til at stoppe her og ikke gå videre i metodens krop.
-        }
-        int oldHealth = adventure.getHealth();
-        if (adventure.drink(foundInRoom)) {
-            adventure.getCurrentRoom().removeFromRoom(foundInRoom);
-        } else if (adventure.drink(foundInInventory)) {
-            adventure.removeFromInventory(foundInInventory);
-        } else {
-            System.out.printf("A%s isn't drinkable.\n", nOrNot(itemWord));
-            return; // Kan bruges til at stoppe her og ikke gå videre i metodens krop.
-        }
-        System.out.printf("Drinking the %s...\n", itemWord);
-        int healthPoints = adventure.getHealth() - oldHealth;
-        if (healthPoints > 0) {
-            System.out.printf("Your health has increased by %d", healthPoints);
-        } else if (healthPoints < 0) {
-            System.out.printf("That wasn't good for you. Your health has decreased by %d", healthPoints * -1);
-        } else {
-            System.out.print("Your health is unchanged, but your thirst is quenched");
+        switch (adventure.consume(food, itemWord)) {
+            case NOT_FOUND -> System.out.printf("Could not find '%s' in %s or your inventory.\n", itemWord, adventure.getCurrentRoom().getName());
+            case WRONG_TYPE -> System.out.printf("A%s isn't %s.\n", nOrNot(itemWord), food ? "edible" : "drinkable");
+            case SUCCESS -> {
+                System.out.printf("%s the %s...\n", food ? "Eating" : "Drinking", itemWord);
+                int healthPoints = adventure.getHealth() - oldHealth;
+                if (healthPoints > 0) {
+                    System.out.printf("Your health has increased by %d", healthPoints);
+                } else if (healthPoints < 0) {
+                    System.out.printf("That wasn't good for you. Your health has decreased by %d", healthPoints * -1);
+                } else {
+                    System.out.printf("Your health is unchanged, but your %s", food ? "stomach is fuller" : "thirst is quenched");
+                }
+            }
         }
         System.out.println(".");
     }
 
     private void equip(String itemWord) {
-        Item item = adventure.findInInventory(itemWord);
-        if (item == null) {
-            System.out.printf("Could not find '%s' in your inventory", itemWord);
-        } else {
-            if (adventure.equip(item)) {
-                System.out.printf("Your %s is equipped and ready for combat", itemWord);
-            } else {
-                System.out.printf("A%s is not a weapon", nOrNot(itemWord));
-            }
+        switch (adventure.equip(itemWord)) {
+            case NOT_FOUND -> System.out.printf("Could not find '%s' in your inventory", itemWord);
+            case WRONG_TYPE -> System.out.printf("A%s is not a weapon", nOrNot(itemWord));
+            case SUCCESS -> System.out.printf("Your %s is equipped and ready for combat", itemWord);
         }
         System.out.println(".");
     }

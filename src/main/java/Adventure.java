@@ -14,18 +14,6 @@ public class Adventure {
     public void teleport() {
         player.teleport();
     }
-    public void addToInventory(Item item) {
-        player.addToInventory(item);
-    }
-
-    public void removeFromInventory(Item item) {
-        player.removeFromInventory(item);
-    }
-
-    public Item findInInventory(String itemWord) {
-        return player.findInInventory(itemWord);
-
-    }
 
     public ArrayList<Item> getInventory() {
         return player.getInventory();
@@ -35,7 +23,7 @@ public class Adventure {
         return player.getCurrentRoom();
     }
 
-    public boolean go(String direction) {
+    public State go(String direction) {
         return player.go(direction);
     }
 
@@ -47,21 +35,26 @@ public class Adventure {
         return player.getHealth();
     }
 
-    public boolean eat(Item item) {
-        return player.eat(item);
+    public State take(String itemWord) {
+        return player.take(itemWord);
     }
 
-    public boolean drink(Item item) {
-        return player.drink(item);
+    public State drop(String itemWord) {
+        return player.take(itemWord);
     }
 
-    public boolean equip(Item item) {
-        return player.equip(item);
+    public State consume(boolean food, String itemWord) {
+        return player.consume(food, itemWord);
+    }
+
+    public State equip(String itemWord) {
+        return player.equip(itemWord);
     }
 
     public Weapon getEquipped() {
         return player.getEquipped();
     }
+
     public void attack(Character c1, Character c2){
         c1.attack(c2);
     }

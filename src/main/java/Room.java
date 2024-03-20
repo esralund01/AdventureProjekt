@@ -111,7 +111,7 @@ public class Room {
         isAlreadyVisited = true;
     }
 
-    public boolean turnLight(boolean on) {
+    public boolean turnLight(boolean on) { // skal converteres til state
         if (hasLights) {
             isDark = !on;
             return true;
@@ -123,9 +123,10 @@ public class Room {
         items.add(item);
     }
 
-    public Item findInRoom(String itemWord) {
+    public Item findInRoom(String itemWord) { // skal måske også fjerne item
         for (Item item : items) {
             if (item.getShortName().equals(itemWord)) {
+                items.remove(item);
                 return item;
             }
         }

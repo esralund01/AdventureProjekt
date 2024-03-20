@@ -38,36 +38,25 @@ public class Player extends Character{
         portalRoom = teleportedFrom;
     }
 
-    public boolean go(String direction) {
+    public State go(String direction) {
         // go er en kopi af move fra Signes PowerPoint på Fronter men med "Darkness, imprison me!" tilføjet.
-        Room desiredRoom = switch (direction) {
-            case "north" -> currentRoom.getNorth();
-            case "east" -> currentRoom.getEast();
-            case "west" -> currentRoom.getWest();
-            case "south" -> currentRoom.getSouth();
-            default -> null;
-        };
-        if (desiredRoom != null && (!currentRoom.getIsDark() || desiredRoom == previousRoom)) {
+        Room desiredRoom;
+        switch (direction) {
+            case "north" -> desiredRoom = currentRoom.getNorth();
+            case "east" -> desiredRoom = currentRoom.getEast();
+            case "west" -> desiredRoom = currentRoom.getWest();
+            case "south" -> desiredRoom = currentRoom.getSouth();
+            default -> {return State.NOT_FOUND;}}
+        if (!currentRoom.getIsDark() || desiredRoom == previousRoom) {
             previousRoom = currentRoom;
             currentRoom = desiredRoom;
-            return true;
+            return State.SUCCESS;
         } else {
-            return false;
+            return State.FAILURE; // upræcis
         }
     }
 
-    public void addToInventory(Item item) {
-        inventory.add(item);
-    }
-
-    public void removeFromInventory(Item item) {
-        inventory.remove(item);
-        if (item == equipped) {
-            equipped = null;
-        }
-    }
-
-    public Item findInInventory(String itemWord) {
+    private Item findInInventory(String itemWord) {
         for (Item item : inventory) {
             if (item.getShortName().equals(itemWord)) {
                 return item;
@@ -76,33 +65,61 @@ public class Player extends Character{
         return null;
     }
 
-    public boolean eat(Item item) {
-        if (item instanceof Food) {
-            health += ((Food) item).getHealthPoints();
-            if (health > maxHealth) {
-                health = maxHealth;
-            }
-            return true;
+    public State take(String itemWord) {
+        Item found = currentRoom.findInRoom(itemWord);
+        if (found == null) {
+            return State.NOT_FOUND;
         }
-        return false;
+        currentRoom.removeFromRoom(found);
+        inventory.add(found);
+        return State.SUCCESS;
     }
 
-    public boolean drink(Item item) {
-        if (item instanceof Liquid) {
-            health += ((Liquid) item).getHealthPoints();
-            if (health > maxHealth) {
-                health = maxHealth;
-            }
-            return true;
+    public State drop(String itemWord) {
+        Item found = findInInventory(itemWord);
+        if (found == null) {
+            return State.NOT_FOUND;
         }
-        return false;
+        inventory.remove(found);
+        getCurrentRoom().addToRoom(found);
+        return State.SUCCESS;
     }
 
-    public boolean equip(Item item){
-        if (item instanceof Weapon) {
-            equipped = (Weapon) item;
-            return true;
+    public State consume(boolean food, String itemWord) {
+        Item foundInRoom = currentRoom.findInRoom(itemWord);
+        Item foundInInventory = findInInventory(itemWord);
+        if (foundInRoom == null && foundInInventory == null) {
+            return State.NOT_FOUND;
         }
-        return false;
+        if ((food && foundInRoom instanceof Food) || (!food && foundInRoom instanceof Liquid)) {
+            currentRoom.removeFromRoom(foundInRoom);
+            incrementHealth(((Food) foundInRoom).getHealthPoints());
+            return State.SUCCESS;
+        } else if ((food && foundInInventory instanceof Food) || (!food && foundInInventory instanceof Liquid)) {
+            inventory.remove(foundInInventory);
+            incrementHealth(((Food) foundInInventory).getHealthPoints());
+            return State.SUCCESS;
+        }
+        return State.WRONG_TYPE;
+    }
+
+    public State equip(String itemWord) {
+        Item found = findInInventory(itemWord);
+        if (found == null) {
+            return State.NOT_FOUND;
+        }
+        if (found instanceof Weapon) {
+            equipped = (Weapon) found;
+            return State.SUCCESS;
+        }
+        return State.WRONG_TYPE;
+    }
+
+    // Auxiliary method
+    private void incrementHealth(int i) {
+        health += i;
+        if (health > maxHealth) {
+            health = maxHealth;
+        }
     }
 }
