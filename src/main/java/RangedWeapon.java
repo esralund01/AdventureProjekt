@@ -3,12 +3,11 @@ public class RangedWeapon extends Weapon {
     // Attribute
     private int numberOfProjectiles;
 
+    // Constructor
     public RangedWeapon(String longName, int hitPoints, int numberOfProjectiles) {
         super(longName, hitPoints);
         this.numberOfProjectiles = numberOfProjectiles;
     }
-
-
 
     // Weapon methods
     @Override
@@ -18,7 +17,7 @@ public class RangedWeapon extends Weapon {
 
     @Override
     public void use(){
-        numberOfProjectiles -= 1;
+        numberOfProjectiles--;
     }
 
     // Item method

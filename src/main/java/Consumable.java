@@ -1,16 +1,16 @@
 public abstract class Consumable extends Item {
 
     // Attribute
-    private final int healthPoints;
+    private final int hitPoints;
 
     // Constructor
-    public Consumable(String longName, int healthPoints) {
+    public Consumable(String longName, int hitPoints) {
         super(longName);
-        this.healthPoints = healthPoints;
+        this.hitPoints = hitPoints;
     }
 
     // Getter
-    public int getHealthPoints() {
-        return healthPoints;
+    public int getHitPoints() {
+        return hitPoints;
     }
 }

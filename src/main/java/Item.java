@@ -1,7 +1,7 @@
 public class Item {
 
     // Attributes
-    private String longName;
+    private final String longName;
     private final String shortName;
 
     // Constructor
@@ -25,10 +25,5 @@ public class Item {
 
     public String getShortName() {
         return shortName;
-    }
-
-    // Setter
-    public void setLongName(String longName) {
-        this.longName = longName;
     }
 }

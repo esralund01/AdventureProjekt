@@ -58,6 +58,33 @@ public class UserInterface {
         return (s.startsWith("a") || s.startsWith("e") || s.startsWith("i") || s.startsWith("o") ? "n " : s.startsWith("u") ? "(n) " : " ") + s;
     }
 
+    private String aToTheUpperCase(String str) {
+        String s = str;
+        if (s.startsWith("a")) {
+            s = "The" + s.substring(1);
+        } else if (s.startsWith("an")) {
+            s = "The" + s.substring(2);
+        } else if (s.startsWith("the")) {
+            s = "T" + s.substring(1);
+        }
+        return s;
+    }
+
+    private String theIfNotName(String str) {
+        String s = str;
+        if (!java.lang.Character.isUpperCase(s.charAt(0))) {
+            s = "the " + s;
+        }
+        return s;
+    }
+
+    private void deathCheck() {
+        if (adventure.getHealth() == 0) {
+            System.out.println("You died.");
+            exit();
+        }
+    }
+
     private void exit() {
         gameIsRunning = false;
         System.out.println("Quitting game...");
@@ -121,7 +148,7 @@ public class UserInterface {
     }
 
     private void health() {
-        System.out.printf("Your health is %d out of %d. You are in ", adventure.getHealth(), adventure.getMaxHealth());
+        System.out.printf("Your health is %d/%d hit points. You are in ", adventure.getHealth(), adventure.getMaxHealth());
         int healthPercentage = adventure.getHealth() * 100 / adventure.getMaxHealth();
         if (healthPercentage > 75) {
             System.out.print("good health and ready to fight");
@@ -145,8 +172,8 @@ public class UserInterface {
         };
         switch (adventure.go(dw)) {
             case NOT_FOUND -> System.out.printf("Could not recognize '%s' as a cardinal direction.\n", dw);
-            case NO_LIGHT -> System.out.printf("You're in %s.\n", adventure.getCurrentRoom().getDescription());
-            case NO_DOOR -> System.out.printf("You can't go %s.\n", dw);
+            case NO_ACCESS -> System.out.printf("You're in a %s.\n", adventure.getCurrentRoom().getDescription());
+            case NULL -> System.out.printf("You can't go %s.\n", dw);
             case SUCCESS -> {
                 System.out.printf("Going %s...\n", dw);
                 if (adventure.getCurrentRoom().getIsAlreadyVisited()) {
@@ -161,6 +188,7 @@ public class UserInterface {
     private void take(String itemWord) {
         switch (adventure.take(itemWord)) {
             case NOT_FOUND -> System.out.printf("Could not find '%s' in %s", itemWord, adventure.getCurrentRoom().getName());
+            case NO_ACCESS -> System.out.printf("Oh, that %s? Good luck trying to take that", itemWord);
             case SUCCESS -> System.out.printf("The %s has been moved to your inventory", itemWord);
         }
         System.out.println(".");
@@ -181,11 +209,12 @@ public class UserInterface {
             case WRONG_TYPE -> System.out.printf("A%s isn't %s.\n", nOrNot(itemWord), food ? "edible" : "drinkable");
             case SUCCESS -> {
                 System.out.printf("%s the %s...\n", food ? "Eating" : "Drinking", itemWord);
-                int healthPoints = adventure.getHealth() - oldHealth;
-                if (healthPoints > 0) {
-                    System.out.printf("Your health has increased by %d", healthPoints);
-                } else if (healthPoints < 0) {
-                    System.out.printf("That wasn't good for you. Your health has decreased by %d", healthPoints * -1);
+                int healthDifference = adventure.getHealth() - oldHealth;
+                if (healthDifference > 0) {
+                    System.out.printf("You gained %d hit points", healthDifference);
+                } else if (healthDifference < 0) {
+                    System.out.printf("That wasn't good for you. You lost %d hit points", healthDifference * -1);
+                    deathCheck();
                 } else {
                     System.out.printf("Your health is unchanged, but your %s", food ? "stomach is fuller" : "thirst is quenched");
                 }
@@ -203,34 +232,31 @@ public class UserInterface {
         System.out.println(".");
     }
 
-    private void attack (){
-        adventure.chooseOpponent();
-        int enemyOldHealth = 0;
-        if (adventure.getOpponent() != null) {
-            enemyOldHealth = adventure.getOpponent().getHealth();
+    private void attack() {
+        Enemy opponent = adventure.getCurrentRoom().findEnemy();
+        int opponentOldHealth = -1;
+        if (opponent != null) {
+            opponentOldHealth = opponent.getHealth();
         }
         int playerOldHealth = adventure.getHealth();
-        switch (adventure.attack()){
-           case FAILURE ->  System.out.println("No weapon is equipped, you cannot attack");
-            case NOT_FOUND -> System.out.println("enemy not found.");
+        switch (adventure.attack(opponent)) {
+            case NULL -> System.out.println("You don't have a weapon ready.");
+            case NO_ACCESS -> System.out.printf("There are no projectiles left in your %s.\n", adventure.getEquipped().getShortName());
+            case NOT_FOUND -> System.out.println("Attacking...\nYou used your weapon in vain.");
             case SUCCESS -> {
-                System.out.println("enemy  health before attack: " + enemyOldHealth);
-                System.out.println("player health before enemy strikes back: " + playerOldHealth);
-                adventure.getEquipped().use();
-
-                System.out.println("Attack!!");
-
-                if (adventure.getOpponent() == null) {
-                    System.out.println("You killed the enemy. Their body is gone, but their weapon is still in the room. ");
-                    System.out.println(adventure.getCurrentRoom().getLastItem().getLongName());
+                assert opponent != null;
+                System.out.printf("Attacking %s...\n", theIfNotName(opponent.getShortName()));
+                int opponentHealthDifference =  opponentOldHealth - opponent.getHealth();
+                System.out.printf("You wield your %s against %s, who then loses %d hit points.\n", adventure.getEquipped().getShortName().toLowerCase(), theIfNotName(opponent.getShortName()), opponentHealthDifference);
+                if (opponent.getHealth() == 0) {
+                    System.out.printf("%s died in combat and left %s.\n", aToTheUpperCase(opponent.getLongName()), opponent.getEquipped().getLongName());
                 }
                 else {
-                    System.out.println("enemy health after attack: " + adventure.getOpponent().getHealth());
-                    //System.out.println(enemy.getName() + " attacks back");
-                    System.out.println("player health after enemy attack: " + adventure.getHealth());
+                    int playerHealthDifference = playerOldHealth - adventure.getHealth();
+                    System.out.printf("%s wields the %s against you. You lose %d hit points.\n", aToTheUpperCase(theIfNotName(opponent.getShortName())), opponent.getEquipped().getShortName().toLowerCase(), playerHealthDifference);
+                    deathCheck();
                 }
             }
-            case NO_AMMO ->  System.out.println("No projectiles left in this weapon...");
         }
     }
 }

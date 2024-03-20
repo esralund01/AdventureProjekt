@@ -1,10 +1,12 @@
 public enum State {
+
+    // Generic
     SUCCESS,
     FAILURE,
+
+    // Specific failures
     NOT_FOUND,
     WRONG_TYPE,
-    NO_DOOR,
-    NO_LIGHT,
-    NO_AMMO,
-    DEATH
+    NULL,
+    NO_ACCESS
 }

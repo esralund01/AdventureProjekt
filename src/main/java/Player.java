@@ -7,16 +7,13 @@ public class Player extends Character {
     private Room currentRoom;
     private Room previousRoom;
     private Room portalRoom;
-    private final int maxHealth;
-    private Enemy opponent;
 
     // Constructor
     public Player(Room firstRoom) {
+        super(100);
         currentRoom = firstRoom;
         portalRoom = currentRoom;
         inventory = new ArrayList<>();
-        maxHealth = 100;
-        health = maxHealth;
     }
 
     // Getters
@@ -28,14 +25,6 @@ public class Player extends Character {
         return inventory;
     }
 
-    public int getMaxHealth() {
-        return maxHealth;
-    }
-
-    public Enemy getOpponent() {
-        return opponent;
-    }
-
     // Methods
     public void teleport() {
         Room teleportedFrom = currentRoom;
@@ -44,21 +33,25 @@ public class Player extends Character {
     }
 
     public State go(String directionWord) {
-        Room desiredRoom;
-        switch (directionWord) {
-            case "north" -> desiredRoom = currentRoom.getNorth();
-            case "east" -> desiredRoom = currentRoom.getEast();
-            case "west" -> desiredRoom = currentRoom.getWest();
-            case "south" -> desiredRoom = currentRoom.getSouth();
+        boolean invalidDW = false;
+        Room desiredRoom = switch (directionWord) {
+            case "north" -> currentRoom.getNorth();
+            case "east" -> currentRoom.getEast();
+            case "west" -> currentRoom.getWest();
+            case "south" -> currentRoom.getSouth();
             default -> {
-                return State.NOT_FOUND; // Failure
+                invalidDW = true;
+                yield null;
             }
+        };
+        if (invalidDW) {
+            return State.NOT_FOUND; // Der var søgt på noget andet end de fire valgmuligheder.
         }
         if (currentRoom.getIsDark() && desiredRoom != previousRoom) {
-            return State.NO_LIGHT; // Failure
+            return State.NO_ACCESS; // Rummet var mørkt, og der var valgt en retning, som ikke var den, man kom fra.
         }
         if (desiredRoom == null) {
-            return State.NO_DOOR; // Failure
+            return State.NULL; // Der var ikke noget rum forbundet i den retning.
         }
         previousRoom = currentRoom;
         currentRoom = desiredRoom;
@@ -66,11 +59,15 @@ public class Player extends Character {
     }
 
     public State take(String itemWord) {
-        Item found = currentRoom.findInRoom(itemWord);
+        Item found = currentRoom.findItem(itemWord);
         if (found == null) {
+            Item maybeYouMeant = currentRoom.findEnemyItem(itemWord);
+            if (maybeYouMeant != null) {
+                return State.NO_ACCESS;
+            }
             return State.NOT_FOUND;
         }
-        currentRoom.removeFromRoom(found);
+        currentRoom.remove(found);
         inventory.add(found);
         return State.SUCCESS;
     }
@@ -81,31 +78,28 @@ public class Player extends Character {
             return State.NOT_FOUND;
         }
         inventory.remove(found);
-        getCurrentRoom().addToRoom(found);
+        getCurrentRoom().add(found);
         return State.SUCCESS;
     }
 
     public State consume(boolean food, String itemWord) {
-        Item foundInRoom = currentRoom.findInRoom(itemWord);
+        // Variablen food skal være true, hvis man vil spise, og false hvis man vil drikke.
+        Item foundInRoom = currentRoom.findItem(itemWord);
         Item foundInInventory = findInInventory(itemWord);
         if (foundInRoom == null && foundInInventory == null) {
             return State.NOT_FOUND;
         }
         Consumable found;
         if ((food && foundInRoom instanceof Food) || (!food && foundInRoom instanceof Liquid)) {
-            currentRoom.removeFromRoom(foundInRoom);
+            currentRoom.remove(foundInRoom);
             found = (Consumable) foundInRoom;
         } else if ((food && foundInInventory instanceof Food) || (!food && foundInInventory instanceof Liquid)) {
             inventory.remove(foundInInventory);
             found = (Consumable) foundInInventory;
-
         } else {
             return State.WRONG_TYPE;
         }
-        health += found.getHealthPoints();
-        if (health > maxHealth) {
-            health = maxHealth;
-        }
+        heal(found.getHitPoints()); // Her får man mere health. Se heal-metoden i Character-klassen.
         return State.SUCCESS;
     }
 
@@ -115,44 +109,35 @@ public class Player extends Character {
             return State.NOT_FOUND;
         }
         if (found instanceof Weapon) {
-            equipped = (Weapon) found;
+            setEquipped((Weapon) found);
             return State.SUCCESS;
         }
         return State.WRONG_TYPE;
     }
-    public void chooseOpponent(){
-        if (getCurrentRoom().getEnemies().isEmpty()) {
-            opponent = null;
+
+    public State attack(Enemy opponent) {
+        if (getEquipped() == null) { // Er der et våben equipped?
+            return State.NULL;
         }
-       else {
-            opponent = currentRoom.getEnemies().getFirst();
+        if (!getEquipped().canUse()) { // Har det flere skud?
+            return State.NO_ACCESS;
         }
-    }
-    public State attack() {
-        if (getEquipped() == null) {
-            return State.FAILURE; // no weapon
-        }
-        if (!getEquipped().canUse()) {
-            return State.NO_AMMO;
-        }
-        if (opponent == null) {
+        this.hit(opponent); // Her bruger vi et skud, om der er en opponent eller ej. Se hit-metoden i Character-klassen.
+        if (opponent == null) { // Er der en opponent?
             return State.NOT_FOUND;
         }
-        opponent.hit(equipped.getHitPoints());
-        if (opponent.getHealth()<=0){
-            currentRoom.getEnemies().remove(opponent);
-            currentRoom.addToRoom(opponent.getEquipped());
-            opponent = null;
-            return State.SUCCESS;
+        if (opponent.getHealth() == 0) { // Er opponent død?
+            currentRoom.remove(opponent);
+            currentRoom.add(opponent.getEquipped());
         }
-        opponent.attack(this);
+        opponent.hit(this); // Opponent angriber tilbage og bruger derfor også et skud.
         return State.SUCCESS;
     }
 
     // Auxiliary method
     private Item findInInventory(String itemWord) {
         for (Item item : inventory) {
-            if (item.getShortName().equals(itemWord)) {
+            if (item.getShortName().equalsIgnoreCase(itemWord)) {
                 return item;
             }
         }

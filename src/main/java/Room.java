@@ -37,15 +37,6 @@ public class Room {
         enemies = new ArrayList<>();
     }
 
-    public ArrayList<Enemy> getEnemies() {
-        return enemies;
-    }
-
-    public void addEnemy(Enemy enemy) {
-        enemies.add(enemy);
-    }
-
-
     // Setters
     public void setNorth(Room north) {
         this.north = north;
@@ -87,15 +78,17 @@ public class Room {
 
     public String getDescription() {
         if (isDark) {
-            return "place filled with darkness, except in the direction you came from";
+            return "place filled with darkness, except in the direction you came from" + (enemies.isEmpty() ? "" : ", and a sense of some presence");
         }
         String s = description;
-        for (Item item : items) {
-            s += ", and " + item.getLongName();
-        }
         for (Enemy enemy : enemies) {
-            s += ", and " + enemy.getName();
+            s += ", " + enemy.getLongName();
         }
+        for (Item item : items) {
+            s += ", " + item.getLongName();
+        }
+        int lastComma = s.lastIndexOf(",") + 1;
+        s = s.substring(0, lastComma) + " and" + s.substring(lastComma);
         return s;
     }
 
@@ -108,7 +101,7 @@ public class Room {
     }
 
     // Methods
-    public boolean turnLight(boolean on) { // skal converteres til state
+    public boolean turnLight(boolean on) {
         if (hasLights) {
             isDark = !on;
             return true;
@@ -116,25 +109,45 @@ public class Room {
         return false;
     }
 
-    public void addToRoom(Item item) {
+    public void add(Item item) {
         items.add(item);
     }
 
-    public Item findInRoom(String itemWord) { // skal måske også fjerne item
+    public void add(Enemy enemy) {
+        enemies.add(enemy);
+    }
+
+    public Item findItem(String itemWord) {
         for (Item item : items) {
-            if (item.getShortName().equals(itemWord)) {
-                items.remove(item);
+            if (item.getShortName().equalsIgnoreCase(itemWord)) {
                 return item;
             }
         }
         return null;
     }
 
-    public void removeFromRoom(Item item) {
+    public Enemy findEnemy() {
+        if (enemies.isEmpty()) {
+            return null;
+        }
+        return enemies.getFirst();
+    }
+
+    public Item findEnemyItem(String itemWord) {
+        for (Enemy enemy : enemies) {
+            Item item = enemy.getEquipped();
+            if (item.getShortName().equalsIgnoreCase(itemWord)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public void remove(Item item) {
         items.remove(item);
     }
 
-    public Item getLastItem(){
-        return items.getLast();
+    public void remove(Enemy enemy) {
+        enemies.remove(enemy);
     }
 }

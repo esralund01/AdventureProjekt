@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Adventure {
 
     // Attribute
-    public final Player player;
+    private final Player player;
 
     // Constructor
     public Adventure() {
@@ -21,9 +21,6 @@ public class Adventure {
 
     public Room getCurrentRoom() {
         return player.getCurrentRoom();
-    }
-    public Enemy getOpponent(){
-        return player.getOpponent();
     }
 
     public State go(String directionWord) {
@@ -58,11 +55,7 @@ public class Adventure {
         return player.getEquipped();
     }
 
-    public State attack(){
-        return player.attack();
-    }
-
-    public void chooseOpponent(){
-        player.chooseOpponent();
+    public State attack(Enemy opponent) {
+        return player.attack(opponent);
     }
 }

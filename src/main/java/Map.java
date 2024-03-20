@@ -31,18 +31,16 @@ public class Map {
         connectWestEast(room8, room9);
         connectNorthSouth(room5, room8);
 
-        // Putting items into rooms
-        room1.addToRoom(new Item("a shiny brass <lamp>"));
-        room2.addToRoom(new MeleeWeapon("a gold <knife>", 15));
-        room3.addToRoom(new MeleeWeapon("a diamond <pickaxe>", 7));
-        room1.addToRoom(new Food("a red <apple>", 10));
-        room2.addToRoom(new Food("a <black apple>", -20));
-        room3.addToRoom(new Liquid("a cup of freshly brewed <coffee>", 25));
-        room1.addToRoom(new RangedWeapon("a black <revolver> with $ bullet(s)", 6, 25));
-        room2.addToRoom(new RangedWeapon("a <bow> and quiver with $ arrow(s)", 12, 20));
-
-        Weapon wand = new MeleeWeapon("Voldemorts <wand>", 10);
-        room4.addEnemy(new Enemy("Voldemort", "He is REALLY mad", 20, wand));
+        // Putting items and enemies into rooms
+        room1.add(new Item("a shiny brass <lamp>"));
+        room2.add(new MeleeWeapon("a gold <knife>", 15));
+        room3.add(new MeleeWeapon("a diamond <pickaxe>", 7));
+        room1.add(new Food("a red <apple>", 10));
+        room2.add(new Food("a <black apple>", -20));
+        room3.add(new Liquid("a cup of freshly brewed <coffee>", 25));
+        room1.add(new RangedWeapon("a black <revolver> with $ bullet(s)", 6, 25));
+        room2.add(new RangedWeapon("a <bow> and quiver with $ arrow(s)", 12, 20));
+        room4.add(new Enemy("the Dark Lord <Voldemort>", 20, new MeleeWeapon("the Elder <Wand>", 10)));
     }
 
     // Getter
