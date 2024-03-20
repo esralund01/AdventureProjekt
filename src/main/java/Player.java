@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Player extends Character{
+public class Player extends Character {
 
     // Attributes
     private final ArrayList<Item> inventory;
@@ -46,7 +46,10 @@ public class Player extends Character{
             case "east" -> desiredRoom = currentRoom.getEast();
             case "west" -> desiredRoom = currentRoom.getWest();
             case "south" -> desiredRoom = currentRoom.getSouth();
-            default -> {return State.NOT_FOUND;}}
+            default -> {
+                return State.NOT_FOUND;
+            }
+        }
         if (!currentRoom.getIsDark() || desiredRoom == previousRoom) {
             previousRoom = currentRoom;
             currentRoom = desiredRoom;
@@ -121,5 +124,25 @@ public class Player extends Character{
         if (health > maxHealth) {
             health = maxHealth;
         }
+    }
+
+    public State attack() {
+        if (getEquipped() == null) {
+            return State.FAILURE;
+        }
+        if (!getEquipped().canUse()) {
+            return State.FAILURE;
+        }
+        if (getCurrentRoom().getEnemies().isEmpty()) {
+            return State.FAILURE;
+        }
+        Enemy enemy = getCurrentRoom().getEnemies().getFirst();
+        enemy.hit(equipped.getHitPoints());
+        if (enemy.getHealth()<=0){
+            getCurrentRoom().getEnemies().remove(enemy);
+            return State.DEATH;
+        }
+        enemy.attack(this);
+        return State.SUCCESS;
     }
 }

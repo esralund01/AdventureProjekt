@@ -33,16 +33,16 @@ public class Map {
 
         // Putting items into rooms
         room1.addToRoom(new Item("a shiny brass <lamp>"));
-        room2.addToRoom(new MeleeWeapon("a gold <knife>"));
-        room3.addToRoom(new MeleeWeapon("a diamond <pickaxe>"));
+        room2.addToRoom(new MeleeWeapon("a gold <knife>", 15));
+        room3.addToRoom(new MeleeWeapon("a diamond <pickaxe>", 7));
         room1.addToRoom(new Food("a red <apple>", 10));
         room2.addToRoom(new Food("a <black apple>", -20));
         room3.addToRoom(new Liquid("a cup of freshly brewed <coffee>", 25));
-        room1.addToRoom(new RangedWeapon("a black <revolver> with $ bullet(s)", 6));
-        room2.addToRoom(new RangedWeapon("a <bow> and quiver with $ arrow(s)", 12));
+        room1.addToRoom(new RangedWeapon("a black <revolver> with $ bullet(s)", 6, 25));
+        room2.addToRoom(new RangedWeapon("a <bow> and quiver with $ arrow(s)", 12, 20));
 
-        Weapon wand = new MeleeWeapon("Voldemorts <wand>");
-        room4.addEnemy(new Enemy("Voldemort", "HE is really mad", 20, wand));
+        Weapon wand = new MeleeWeapon("Voldemorts <wand>", 10);
+        room4.addEnemy(new Enemy("Voldemort", "He is REALLY mad", 20, wand));
     }
 
     // Getter

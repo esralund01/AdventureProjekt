@@ -19,5 +19,10 @@ public class Enemy extends Character{
         return description;
     }
 
+    public void attack(Character player){
+        player.hit(equipped.getHitPoints());
+    }
+
+
 }
 

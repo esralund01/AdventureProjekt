@@ -207,22 +207,24 @@ public class UserInterface {
     }
 
     private void attack (){
-        if (adventure.getEquipped() == null){
-            System.out.println("No weapon is equipped, you cannot attack");
-        } else if (adventure.getEquipped().canUse()) {
-            adventure.getEquipped().use();
-            Enemy enemy = adventure.getCurrentRoom().getEnemies().getFirst();
-            System.out.println("enemy  health" + enemy.getHealth());
-            adventure.attack(adventure.player, enemy);
-            System.out.println("Attack!!");
-            System.out.println("enemy health " + enemy.getHealth());
+        Enemy enemy = adventure.getCurrentRoom().getEnemies();
+        System.out.println("enemy  health before attack: " + enemy.getHealth());
+        System.out.println("player health before enemy strikes back: " + adventure.getHealth());
+        switch (adventure.attack()){
+           case State.FAILURE ->  System.out.println("No weapon is equipped, you cannot attack");
+            case State.SUCCESS -> {
+                adventure.getEquipped().use();
 
-            System.out.println("player health: " + adventure.getHealth());
-            adventure.attack(enemy, adventure.player);
-            System.out.println(enemy.getName() + " attacks back");
-            System.out.println("player health: " + adventure.getHealth());
-        } else {
-            System.out.println("No projectiles left in this weapon...");
+              //  Enemy enemy = adventure.getCurrentRoom().getEnemies().getFirst();
+                System.out.println("Attack!!");
+                System.out.println("enemy health after attack: " + enemy.getHealth());
+
+
+                System.out.println(enemy.getName() + " attacks back");
+                System.out.println("player health after enemy attack: " + adventure.getHealth());
+            }
+            case State.NO_AMMO ->  System.out.println("No projectiles left in this weapon...");
+            case State.DEATH -> System.out.println("You killed the enemy. Their body is gone, but their weapon is still in the room");
         }
     }
 }

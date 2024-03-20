@@ -5,19 +5,22 @@ public abstract class Character {
 
 
 
-    public void attack (Character character) {
+   /* public void attack (Character character) {
         character.hit();
     }
 
-    private void hit(){
-         health -= 10;
+    */
+
+    public void hit(int hitPoints) {
+        health -= hitPoints;
     }
 
-   // public abstract void drop();
+    // public abstract void drop();
 
     public int getHealth() {
         return health;
     }
+
     public Weapon getEquipped() {
         return equipped;
     }
