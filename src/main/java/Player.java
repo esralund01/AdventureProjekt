@@ -44,18 +44,18 @@ public class Player extends Character {
     }
 
     public State go(String directionWord) {
-        boolean invalidDW = false;
-        Room desiredRoom = switch (directionWord) {
+        boolean invalidDirectionWord = false;
+        Room desiredRoom = switch (directionWord.toLowerCase()) {
             case "north" -> currentRoom.getNorth();
             case "east" -> currentRoom.getEast();
             case "west" -> currentRoom.getWest();
             case "south" -> currentRoom.getSouth();
             default -> {
-                invalidDW = true;
+                invalidDirectionWord = true;
                 yield null;
             }
         };
-        if (invalidDW) {
+        if (invalidDirectionWord) {
             return State.NOT_FOUND; // Der var søgt på noget andet end de fire valgmuligheder.
         }
         if (currentRoom.getIsDark() && desiredRoom != previousRoom) {
