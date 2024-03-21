@@ -55,7 +55,19 @@ public class Adventure {
         return player.getEquipped();
     }
 
-    public State attack() {
-        return player.attack();
+    public State attack(String name) {
+        return player.attack(name);
+    }
+
+    public int getOldHealth() {
+        return player.getOldHealth();
+    }
+
+    public Enemy getSelected() {
+        return player.getSelected();
+    }
+
+    public Room getPreviousRoom() {
+        return player.getPreviousRoom();
     }
 }

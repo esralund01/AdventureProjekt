@@ -7,6 +7,7 @@ public class Player extends Character {
     private Room currentRoom;
     private Room previousRoom;
     private Room portalRoom;
+    private Enemy selected;
 
     // Constructor
     public Player(Room firstRoom) {
@@ -21,12 +22,21 @@ public class Player extends Character {
         return currentRoom;
     }
 
+    public Room getPreviousRoom() {
+        return previousRoom;
+    }
+
     public ArrayList<Item> getInventory() {
         return inventory;
     }
 
+    public Enemy getSelected() {
+        return selected;
+    }
+
     // Methods
     public void teleport() {
+        selected = null;
         currentRoom.leave();
         Room teleportedFrom = currentRoom;
         currentRoom = portalRoom;
@@ -54,6 +64,7 @@ public class Player extends Character {
         if (desiredRoom == null) {
             return State.NULL; // Der var ikke noget rum forbundet i den retning.
         }
+        selected = null;
         currentRoom.leave();
         previousRoom = currentRoom;
         currentRoom = desiredRoom;
@@ -117,23 +128,30 @@ public class Player extends Character {
         return State.WRONG_TYPE;
     }
 
-    public State attack() {
-        Enemy opponent = currentRoom.getSelected();
+    public State attack(String name) {
         if (getEquipped() == null) { // Er der et våben equipped?
             return State.NULL;
         }
         if (!getEquipped().canUse()) { // Har det flere skud?
             return State.NO_ACCESS;
         }
-        this.hit(opponent); // Her bruger vi et skud, om der er en opponent eller ej. Se hit-metoden i Character-klassen.
-        if (opponent == null) { // Er der en opponent?
+        if (!name.isEmpty()) { // Vil vi vælge en ny enemy?
+            selected = currentRoom.findEnemy(name);
+        } else if (selected != null) { // Hvis ikke,
+            if (selected.getHealth() == 0) { // var den gamle valgte så død?
+                selected = null;
+            }
+        }
+        this.hit(selected); // Her bruger vi et skud, om der er en opponent eller ej. Se hit-metoden i Character-klassen.
+        if (selected == null) { // Er der en valgt enemy?
             return State.NOT_FOUND;
         }
-        if (opponent.getHealth() == 0) { // Er opponent død?
-            currentRoom.remove(opponent);
-            currentRoom.add(opponent.getEquipped());
+        if (selected.getHealth() == 0) { // Døde enemy?
+            currentRoom.remove(selected);
+            currentRoom.add(selected.getEquipped());
+        } else {
+            selected.hit(this); // Opponent angriber tilbage og bruger derfor også et skud.
         }
-        opponent.hit(this); // Opponent angriber tilbage og bruger derfor også et skud.
         return State.SUCCESS;
     }
 

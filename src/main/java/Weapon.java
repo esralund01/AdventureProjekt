@@ -9,6 +9,7 @@ public abstract class Weapon extends Item {
         this.hitPoints = hitPoints;
     }
 
+    // Getter
     public int getHitPoints() {
         return hitPoints;
     }

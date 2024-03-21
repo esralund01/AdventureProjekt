@@ -3,12 +3,14 @@ public abstract class Character {
     // Attributes
     private int health;
     private final int maxHealth;
+    private int oldHealth;
     private Weapon equipped;
 
     // Constructor
     public Character(int health) {
         this.health = health;
         this.maxHealth = health;
+        this.oldHealth = health;
     }
 
     // Getters
@@ -18,6 +20,10 @@ public abstract class Character {
 
     public int getMaxHealth() {
         return maxHealth;
+    }
+
+    public int getOldHealth() {
+        return oldHealth;
     }
 
     public Weapon getEquipped() {
@@ -40,12 +46,14 @@ public abstract class Character {
     }
 
     protected void heal(int hitPoints) {
+        oldHealth = health;
         health += hitPoints;
         cap();
     }
 
     // Auxiliary methods
     private void damage(int hitPoints) {
+        oldHealth = health;
         health -= hitPoints;
         cap();
     }

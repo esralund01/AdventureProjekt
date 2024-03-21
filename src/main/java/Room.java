@@ -14,7 +14,6 @@ public class Room {
     private boolean isDark;
     private final ArrayList<Item> items;
     private final ArrayList<Enemy> enemies;
-    private Enemy selected;
 
     // Constructor 1: Rum uden lys/mørke-funktion.
     public Room(String name, String description) {
@@ -100,14 +99,9 @@ public class Room {
         return isDark;
     }
 
-    public Enemy getSelected() {
-        return selected;
-    }
-
     // Methods
     public void leave() {
         isAlreadyVisited = true;
-        selected = null;
     }
 
     public boolean turnLight(boolean on) {
@@ -135,6 +129,15 @@ public class Room {
         return null;
     }
 
+    public Enemy findEnemy(String name) {
+        for (Enemy enemy : enemies) {
+            if (enemy.getShortName().equalsIgnoreCase(name)) {
+                return enemy;
+            }
+        }
+        return null;
+    }
+
     public Item findEnemyItem(String itemWord) {
         for (Enemy enemy : enemies) {
             Item item = enemy.getEquipped();
@@ -150,20 +153,6 @@ public class Room {
     }
 
     public void remove(Enemy enemy) {
-        selected = null;
         enemies.remove(enemy);
-    }
-
-    public Enemy selectEnemy(String name) {
-        if (name.isEmpty()) {
-            return selected;
-        }
-        for (Enemy enemy : enemies) {
-            if (enemy.getShortName().equalsIgnoreCase(name)) {
-                selected = enemy;
-                return enemy;
-            }
-        }
-        return null;
     }
 }
