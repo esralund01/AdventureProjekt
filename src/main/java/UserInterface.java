@@ -7,6 +7,7 @@ public class UserInterface {
     private final Scanner scanner;
     private final Adventure adventure;
     private boolean gameIsRunning;
+    private String command;
 
     // Constructor
     public UserInterface() {
@@ -23,9 +24,9 @@ public class UserInterface {
         look();
         while (gameIsRunning) {
             System.out.printf("\n%sEnter command:%s ", TextStyle.BRIGHT_BLACK_FG, TextStyle.RESET);
-            String command = scanner.next().toLowerCase();
+            command = scanner.next();
             System.out.println();
-            switch (command) {
+            switch (command.toLowerCase()) {
                 case "n", "e", "w", "s" -> go(command);
                 case "exit" -> exit();
                 case "look" -> look();
@@ -166,7 +167,7 @@ public class UserInterface {
     }
 
     private void go(String directionWord) {
-        String dw = switch (directionWord) {
+        String dw = switch (directionWord.toLowerCase()) {
             case "n" -> "north";
             case "e" -> "east";
             case "w" -> "west";
@@ -174,7 +175,7 @@ public class UserInterface {
             default -> directionWord;
         };
         switch (adventure.go(dw)) {
-            case NOT_FOUND -> System.out.printf("Could not recognize '%s' as a cardinal direction.\n", dw);
+            case NOT_FOUND -> System.out.printf("Could not recognize '%s' as a cardinal direction.\n", command.substring(3)); // Pas på med den her substring.
             case NO_ACCESS -> System.out.printf("You're in a %s.\n", adventure.getCurrentRoom().getDescription());
             case NULL -> System.out.printf("You can't go %s.\n", dw);
             case SUCCESS -> {
@@ -190,7 +191,7 @@ public class UserInterface {
 
     private void take(String itemWord) {
         switch (adventure.take(itemWord)) {
-            case NOT_FOUND -> System.out.printf("Could not find '%s' in %s", itemWord, adventure.getCurrentRoom().getName());
+            case NOT_FOUND -> System.out.printf("Could not find '%s' in %s", command.substring(5), adventure.getCurrentRoom().getName());
             case NO_ACCESS -> System.out.printf("Oh, that %s? Good luck trying to steal that", itemWord);
             case SUCCESS -> System.out.printf("You're taking the %s...\nThe %s has been moved to your inventory", itemWord, itemWord);
         }
@@ -199,7 +200,7 @@ public class UserInterface {
 
     private void drop(String itemWord) {
         switch (adventure.drop(itemWord)) {
-            case NOT_FOUND -> System.out.printf("Could not find '%s' in your inventory", itemWord);
+            case NOT_FOUND -> System.out.printf("Could not find '%s' in your inventory", command.substring(5));
             case SUCCESS -> System.out.printf("You're dropping the %s in %s...\nThe %s has been removed from your inventory and dropped in %s", itemWord, adventure.getCurrentRoom().getName(), itemWord, adventure.getCurrentRoom().getName());
         }
         System.out.println(".");
@@ -207,7 +208,7 @@ public class UserInterface {
 
     private void consume(boolean food, String itemWord) {
         switch (adventure.consume(food, itemWord)) {
-            case NOT_FOUND -> System.out.printf("Could not find '%s' in %s or your inventory.\n", itemWord, adventure.getCurrentRoom().getName());
+            case NOT_FOUND -> System.out.printf("Could not find '%s' in %s or your inventory.\n", food ? command.substring(4) : command.substring(6), adventure.getCurrentRoom().getName());
             case WRONG_TYPE -> System.out.printf("A%s isn't %s.\n", nOrNot(itemWord), food ? "edible" : "drinkable");
             case SUCCESS -> {
                 System.out.printf("You're %s the %s...\n", food ? "eating" : "drinking", itemWord);
@@ -226,7 +227,7 @@ public class UserInterface {
 
     private void equip(String itemWord) {
         switch (adventure.equip(itemWord)) {
-            case NOT_FOUND -> System.out.printf("Could not find '%s' in your inventory", itemWord);
+            case NOT_FOUND -> System.out.printf("Could not find '%s' in your inventory", command.substring(6));
             case WRONG_TYPE -> System.out.printf("A%s is not a weapon", nOrNot(itemWord));
             case SUCCESS -> System.out.printf("You're equipping yourself with the %s...\nYour %s is now ready for combat", itemWord, itemWord);
         }
@@ -241,7 +242,7 @@ public class UserInterface {
                 if (name.isEmpty()) {
                     System.out.printf("You're attacking...\nYou used your weapon in vain, because you haven't selected an enemy in %s.\n", adventure.getCurrentRoom().getName());
                 } else {
-                    System.out.printf("You're attacking '%s'...\nYou used your weapon in vain, because '%s' could not be found in %s.\n", name, name, adventure.getCurrentRoom().getName());
+                    System.out.printf("You're attacking '%s'...\nYou used your weapon in vain, because '%s' could not be found in %s.\n", command.substring(7), command.substring(7), adventure.getCurrentRoom().getName());
                 }
             }
             case SUCCESS -> {
