@@ -37,7 +37,6 @@ public class Player extends Character {
     // Methods
     public void teleport() {
         selected = null;
-        currentRoom.leave();
         Room teleportedFrom = currentRoom;
         currentRoom = portalRoom;
         portalRoom = teleportedFrom;
@@ -65,7 +64,6 @@ public class Player extends Character {
             return State.NULL; // Der var ikke noget rum forbundet i den retning.
         }
         selected = null;
-        currentRoom.leave();
         previousRoom = currentRoom;
         currentRoom = desiredRoom;
         return State.SUCCESS;

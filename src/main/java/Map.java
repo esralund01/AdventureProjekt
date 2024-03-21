@@ -7,15 +7,15 @@ public class Map {
     public Map() {
 
         // Creating rooms
-        Room room1 = new Room("Entrance hall", "Large hall with no distinct features, except two doors");
-        Room room2 = new Room("Library", "everything looks like a huge mess, looking like something went trough, there are two doors in this room");
-        Room room3 = new Room("kea", "kea with no distinct features, except two doors");
-        Room room4 = new Room("Dungeon", "You sense af chilling presence in this room, but you can see two doors");
-        Room room5 = new Room("Treasure vault", "the hidden room you've with only one entrance, and filled with all sorts of treasures,", true);
-        Room room6 = new Room("The kitchen", "a room filled with delicious consumables, and two doors", true);
-        Room room7 = new Room("Gardens", "Nothing to exciting a garden which hasn't been looked after, but there are two doors");
-        Room room8 = new Room("Royal chambers", "you sense you are nearing your objective in this room, there are three doors", true);
-        Room room9 = new Room("Armory", "room with a lot of different weapons from any time, and two doors", true);
+        Room room1 = new Room("the Entrance Hall", "a large hall with no distinct features, except two doors");
+        Room room2 = new Room("the Library", "where everything looks like a huge mess, looking like something went down, there are two doors in this room");
+        Room room3 = new Room("KEA", "it has no distinct features, except two doors");
+        Room room4 = new Room("the Dungeon", "where you sense a chilling presence, but you can see two doors");
+        Room room5 = new Room("the Treasure Vault", "a hidden room with only one entrance, filled with all sorts of treasures", true);
+        Room room6 = new Room("a kitchen", "a room filled with delicious consumables, and two doors", true);
+        Room room7 = new Room("the Gardens", "which hasn't been looked after, but there are two doors");
+        Room room8 = new Room("the Royal Chambers", "where you sense you are nearing your objective in this room, there are three doors", true);
+        Room room9 = new Room("the Armory", "a room with a lot of different weapons from any time, and two doors", true);
 
         // Setting first room
         firstRoom = room1;

@@ -77,8 +77,9 @@ public class Room {
 
     public String getDescription() {
         if (isDark) {
-            return "place filled with darkness, except in the direction you came from" + (enemies.isEmpty() ? "" : ", and a sense of some presence");
+            return "a place filled with darkness, except in the direction you came from" + (enemies.isEmpty() ? "" : ", and a sense of some presence");
         }
+        isAlreadyVisited = true;
         String s = description;
         for (Enemy enemy : enemies) {
             s += ", " + enemy.getLongName();
@@ -100,10 +101,6 @@ public class Room {
     }
 
     // Methods
-    public void leave() {
-        isAlreadyVisited = true;
-    }
-
     public boolean turnLight(boolean on) {
         if (hasLights) {
             isDark = !on;

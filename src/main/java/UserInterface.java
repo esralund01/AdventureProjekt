@@ -116,7 +116,7 @@ public class UserInterface {
     }
 
     private void look() {
-        System.out.printf("You are in %s, a%s.\n", adventure.getCurrentRoom().getName(), nOrNot(adventure.getCurrentRoom().getDescription()));
+        System.out.printf("You are in %s, %s.\n", adventure.getCurrentRoom().getName(), adventure.getCurrentRoom().getDescription());
     }
 
     private void turnLight(boolean on) {
@@ -176,7 +176,7 @@ public class UserInterface {
         };
         switch (adventure.go(dw)) {
             case NOT_FOUND -> System.out.printf("Could not recognize '%s' as a cardinal direction.\n", command.substring(3)); // Pas på med den her substring.
-            case NO_ACCESS -> System.out.printf("You're in a %s.\n", adventure.getCurrentRoom().getDescription());
+            case NO_ACCESS -> System.out.printf("You're in %s.\n", adventure.getCurrentRoom().getDescription());
             case NULL -> System.out.printf("You can't go %s.\n", dw);
             case SUCCESS -> {
                 System.out.printf("You're leaving %s and going %s...\n", adventure.getPreviousRoom().getName(), dw);
