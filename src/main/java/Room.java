@@ -10,10 +10,10 @@ public class Room {
     private Room west;
     private Room south;
     private boolean isAlreadyVisited;
-    private final boolean hasLights;
+    public final boolean hasLights; // Public som midlertidig løsning til GUI.
     private boolean isDark;
-    private final ArrayList<Item> items;
-    private final ArrayList<Enemy> enemies;
+    public final ArrayList<Item> items; // Public som midlertidig løsning til GUI.
+    public final ArrayList<Enemy> enemies; // Public som midlertidig løsning til GUI.
 
     // Constructor 1: Rum uden lys/mørke-funktion.
     public Room(String name, String description) {

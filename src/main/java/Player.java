@@ -17,6 +17,11 @@ public class Player extends Character {
         inventory = new ArrayList<>();
     }
 
+    // Getter til GUI
+    public Room getPortalRoom() {
+        return portalRoom;
+    }
+
     // Getters
     public Room getCurrentRoom() {
         return currentRoom;
@@ -87,6 +92,8 @@ public class Player extends Character {
         Item found = findInInventory(itemWord);
         if (found == null) {
             return State.NOT_FOUND;
+        } else if (found == getEquipped()) {
+            setEquipped(null);
         }
         inventory.remove(found);
         getCurrentRoom().add(found);

@@ -14,8 +14,7 @@ public class TextStyle {
     public static final String BOLD = "\u001B[1m";
 
     // Metoden tager en string ind og returnerer en string magen til men i farver.
-    public static String color(String str) {
-        String s = str;
+    public static String color(String s) {
 
         // <tekst> bliver udskiftet med gul tekst.
         s = s.replace('<', 'Æ');

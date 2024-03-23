@@ -70,4 +70,9 @@ public class Adventure {
     public Room getPreviousRoom() {
         return player.getPreviousRoom();
     }
+
+    // til GUI
+    public Room getPortalRoom() {
+        return player.getPortalRoom();
+    }
 }

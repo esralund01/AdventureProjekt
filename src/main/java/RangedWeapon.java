@@ -1,7 +1,7 @@
 public class RangedWeapon extends Weapon {
 
     // Attribute
-    private int numberOfProjectiles;
+    public int numberOfProjectiles; // Public som midlertidig løsning til GUI.
 
     // Constructor
     public RangedWeapon(String longName, int hitPoints, int numberOfProjectiles) {

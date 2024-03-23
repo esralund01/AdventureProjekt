@@ -39,9 +39,9 @@ public class Map {
         room2.add(new MeleeWeapon("a gold <knife>", 15));
         room3.add(new MeleeWeapon("a diamond <pickaxe>", 7));
         room9.add(new MeleeWeapon("a steel <katana>", 35));
-        room9.add(new RangedWeapon("a golden <ak-47>", 30, 50));
+        room9.add(new RangedWeapon("a golden <AK-47>", 30, 50));
         room1.add(new Food("a red <apple>", 10));
-        room6.add(new Food("a bigmac <burger>", 30));
+        room6.add(new Food("a big-mac <burger>", 30));
         room6.add(new Liquid("an iskold <faxe>", 50));
         room8.add(new Liquid("a can of sparkling <water>", -10));
         room2.add(new Food("a <black apple>", -20));
@@ -49,9 +49,9 @@ public class Map {
         room1.add(new RangedWeapon("a black <revolver> with $ bullet(s)", 6, 25));
         room2.add(new RangedWeapon("a <bow> and quiver with $ arrow(s)", 12, 20));
         room5.add(new Enemy("the Dark Lord <Voldemort>", 150, new MeleeWeapon("the Elder <Wand>", 25)));
-        room4.add(new Enemy("Visible <Ghost>", 20, new MeleeWeapon("Ghost <Weapon>", 10)));
-        room3.add(new Enemy("a REALLY large <Spider>", 15, new MeleeWeapon("spider <web>", 10)));
-        room3.add(new Enemy("a REALLY large <Wasp>", 15, new MeleeWeapon("wasp <stinger>", 10)));
+        room4.add(new Enemy("a visible <ghost>", 20, new MeleeWeapon("a phantom <dagger>", 10)));
+        room3.add(new Enemy("a REALLY large <spider>", 15, new MeleeWeapon("a spider <web>", 10)));
+        room3.add(new Enemy("a REALLY large <wasp>", 15, new MeleeWeapon("a wasp <stinger>", 10)));
     }
 
     // Getter
