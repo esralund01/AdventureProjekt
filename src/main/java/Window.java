@@ -368,7 +368,10 @@ public class Window {
         boolean nothingToConsume = true;
         for (Item item : inventoryAndRoom) {
             if (item instanceof Consumable) {
-                createButtonWithGeneratedToolTip(((item instanceof Food) ? "eat" : "drink"), consumePanel, item);
+                JButton b = createButtonWithGeneratedToolTip(((item instanceof Food) ? "eat" : "drink"), consumePanel, item);
+                if (!adventure.getInventory().contains(item) && adventure.getCurrentRoom().getIsDark()) {
+                    b.setEnabled(false);
+                }
                 nothingToConsume = false;
             }
         }
